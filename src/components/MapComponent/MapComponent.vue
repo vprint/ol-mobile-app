@@ -1,18 +1,12 @@
 <template>
   <div id="map" class="map"></div>
-  <!-- Mobile display -->
 
+  <!-- Mobile display -->
   <div v-if="$q.platform.is.mobile">
     <q-page-sticky position="top-right">
       <!-- Manage layers -->
       <div class="q-px-md q-py-md">
-        <q-btn
-          round
-          color="secondary"
-          icon="mdi-layers"
-          text-color="primary"
-          @click="componentStore.changeVisibility()"
-        />
+        <LayerManagerButton></LayerManagerButton>
       </div>
 
       <!-- Copy coordinates -->
@@ -27,12 +21,7 @@
 
       <!-- Measure -->
       <div class="q-px-md q-py-md">
-        <q-btn
-          round
-          color="secondary"
-          icon="sym_o_straighten"
-          text-color="primary"
-        />
+        <MeasureComponent></MeasureComponent>
       </div>
     </q-page-sticky>
   </div>
@@ -49,13 +38,13 @@ import { fromLonLat } from 'ol/proj';
 import { addBackgroundLayers } from '../../utils/mapLayers';
 import { addControlers } from '../../utils/mapControlers';
 import { useMapStore } from '../../stores/map-store';
-import { useComponentStore } from 'src/stores/component-store';
 import CardManager from '../CardManager/CardManager.vue';
+import MeasureComponent from '../MeasureComponent/MeasureComponent.vue';
+import LayerManagerButton from '../LayerManager/LayerManagerButton.vue';
 
 let map: Map;
 
 const mapStore = useMapStore();
-const componentStore = useComponentStore();
 
 onMounted(() => {
   // Map initialization

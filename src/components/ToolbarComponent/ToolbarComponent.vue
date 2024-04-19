@@ -15,18 +15,7 @@
     <q-space></q-space>
 
     <!-- Measure button -->
-    <q-btn v-if="$q.platform.is.desktop" fab flat icon="sym_o_straighten">
-      <q-tooltip
-        anchor="bottom middle"
-        self="bottom middle"
-        transition-show="scale"
-        transition-hide="scale"
-        :delay="500"
-        style="border-radius: 0"
-      >
-        Measure
-      </q-tooltip>
-    </q-btn>
+    <MeasureComponent v-if="$q.platform.is.desktop"></MeasureComponent>
 
     <!-- Coordinates -->
     <q-btn v-if="$q.platform.is.desktop" fab flat icon="mdi-map-marker-check">
@@ -43,24 +32,7 @@
     </q-btn>
 
     <!-- Layer button -->
-    <q-btn
-      v-if="$q.platform.is.desktop"
-      fab
-      flat
-      icon="mdi-layers"
-      @click="componentStore.changeVisibility()"
-    >
-      <q-tooltip
-        anchor="bottom middle"
-        self="bottom middle"
-        transition-show="scale"
-        transition-hide="scale"
-        :delay="500"
-        style="border-radius: 0"
-      >
-        Manage layers
-      </q-tooltip>
-    </q-btn>
+    <LayerManagerButton v-if="$q.platform.is.desktop"></LayerManagerButton>
 
     <!-- Searchbox -->
     <q-select
@@ -89,9 +61,9 @@
 <script setup lang="ts">
 import { APP_SETTINGS } from '../../utils/params/app';
 import { ref } from 'vue';
-import { useComponentStore } from 'src/stores/component-store';
+import MeasureComponent from '../MeasureComponent/MeasureComponent.vue';
+import LayerManagerButton from '../LayerManager/LayerManagerButton.vue';
 
-const componentStore = useComponentStore();
 const stringOptions = ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'];
 const options = ref(stringOptions);
 const model = ref(null);
