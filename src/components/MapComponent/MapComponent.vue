@@ -76,9 +76,8 @@ onMounted(() => {
 });
 </script>
 
-<style>
+<style lang="scss">
 @import 'ol/ol.css';
-@import 'ol-ext/dist/ol-ext.css';
 
 #map {
   position: fixed;

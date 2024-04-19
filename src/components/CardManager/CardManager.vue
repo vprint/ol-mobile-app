@@ -51,4 +51,13 @@ watch(
   overflow: auto;
   background-color: $secondary;
 }
+
+@media (max-width: 600px) {
+  .global-card {
+    width: 100%;
+    height: 50%;
+    left: 0;
+    bottom: 0;
+  }
+}
 </style>
