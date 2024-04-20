@@ -21,7 +21,7 @@
 
       <!-- Measure -->
       <div class="q-px-md q-py-md">
-        <MeasureComponent></MeasureComponent>
+        <MeasureComponent v-if="mapStore.isInitialized"></MeasureComponent>
       </div>
     </q-page-sticky>
   </div>
