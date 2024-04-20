@@ -1,6 +1,9 @@
 <template>
   <!-- Toolbar -->
-  <q-toolbar class="bg-secondary text-primary shadow-2">
+  <q-toolbar
+    v-if="mapStore.isInitialized"
+    class="bg-secondary text-primary shadow-2"
+  >
     <!-- Logo -->
     <q-avatar square>
       <q-img :src="'icons/efeo_logo.png'"></q-img>
@@ -16,6 +19,8 @@
 
     <!-- Measure button -->
     <MeasureComponent v-if="$q.platform.is.desktop"></MeasureComponent>
+
+    <q-separator vertical style="margin: 2px"></q-separator>
 
     <!-- Coordinates -->
     <q-btn v-if="$q.platform.is.desktop" fab flat icon="mdi-map-marker-check">
@@ -63,10 +68,12 @@ import { APP_SETTINGS } from '../../utils/params/app';
 import { ref } from 'vue';
 import MeasureComponent from '../MeasureComponent/MeasureComponent.vue';
 import LayerManagerButton from '../LayerManager/LayerManagerButton.vue';
+import { useMapStore } from 'src/stores/map-store';
 
 const stringOptions = ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'];
 const options = ref(stringOptions);
 const model = ref(null);
+const mapStore = useMapStore();
 
 /**
  * Filters entries according to the text entered by the user
