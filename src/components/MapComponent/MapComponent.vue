@@ -41,6 +41,7 @@ import { useMapStore } from '../../stores/map-store';
 import CardManager from '../CardManager/CardManager.vue';
 import MeasureComponent from '../MeasureComponent/MeasureComponent.vue';
 import LayerManagerButton from '../LayerManager/LayerManagerButton.vue';
+import { GeolocationTracker } from '../../utils/GeolocationTracker';
 
 let map: Map;
 
@@ -62,6 +63,10 @@ onMounted(() => {
   addBackgroundLayers(map);
   addWMSLayers(map);
   addControlers(map);
+
+  // Add geolocation tracker
+  new GeolocationTracker(map);
+
   mapStore.setMap(map);
 });
 </script>
