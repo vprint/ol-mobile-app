@@ -66,7 +66,7 @@ function addMeasure(): void {
   // Enable tool
   if (!isActive) {
     drawInteraction.setActive(true);
-    isActive = !isActive;
+    isActive = true;
 
     drawInteraction.on(
       'drawstart',
@@ -75,16 +75,18 @@ function addMeasure(): void {
 
     drawInteraction.on(['drawend', 'drawabort'], () => {
       tooltipInformation.removeFeature();
-      drawInteraction.setActive(false);
-      isActive = !isActive;
+      setTimeout(() => {
+        drawInteraction.setActive(false);
+      }, 50);
+      isActive = false;
     });
   }
 
   // Disable tool
   else {
-    isActive = !isActive;
     tooltipInformation.removeFeature();
     drawInteraction.setActive(false);
+    isActive = false;
   }
 }
 </script>
