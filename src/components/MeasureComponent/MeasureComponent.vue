@@ -29,17 +29,16 @@ import { useMapStore } from 'src/stores/map-store';
 import Tooltip from 'ol-ext/overlay/Tooltip';
 
 const mapStore = useMapStore();
-const measureLayerSource = new VectorSource();
+let isActive = false;
 const drawInteraction = initializeDraw();
 const tooltipInformation = initializeTooltip();
-let isActive = false;
 
 /**
  * Initialize drawer
  */
 function initializeDraw(): Draw {
   const draw = new Draw({
-    source: measureLayerSource,
+    source: new VectorSource(),
     type: 'LineString',
   });
   draw.set('name', 'drawInteraction');
@@ -68,10 +67,9 @@ function addMeasure(): void {
     drawInteraction.setActive(true);
     isActive = true;
 
-    drawInteraction.on(
-      'drawstart',
-      tooltipInformation.setFeature.bind(tooltipInformation)
-    );
+    drawInteraction.on('drawstart', (e) => {
+      tooltipInformation.setFeature(e);
+    });
 
     drawInteraction.on(['drawend', 'drawabort'], () => {
       tooltipInformation.removeFeature();
