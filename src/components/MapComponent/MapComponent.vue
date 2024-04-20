@@ -35,7 +35,7 @@ import View from 'ol/View.js';
 import { onMounted } from 'vue';
 import { MapSetting } from '../../utils/params/mapSettings';
 import { fromLonLat } from 'ol/proj';
-import { addBackgroundLayers } from '../../utils/mapLayers';
+import { addBackgroundLayers, addWMSLayers } from '../../utils/mapLayers';
 import { addControlers } from '../../utils/mapControlers';
 import { useMapStore } from '../../stores/map-store';
 import CardManager from '../CardManager/CardManager.vue';
@@ -60,6 +60,7 @@ onMounted(() => {
   });
 
   addBackgroundLayers(map);
+  addWMSLayers(map);
   addControlers(map);
   mapStore.setMap(map);
 });
