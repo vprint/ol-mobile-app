@@ -1,13 +1,15 @@
 <template>
-  <!-- Desktop -->
   <q-btn
-    v-if="$q.platform.is.desktop"
-    fab
-    flat
+    :flat="$q.platform.is.desktop"
+    :fab="$q.platform.is.desktop"
+    :round="$q.platform.is.mobile"
+    :color="$q.platform.is.mobile ? 'secondary' : undefined"
     icon="sym_o_straighten"
+    :text-color="$q.platform.is.mobile ? 'primary' : undefined"
     @click="addMeasure()"
   >
     <q-tooltip
+      v-if="$q.platform.is.desktop"
       anchor="bottom middle"
       self="bottom middle"
       transition-show="scale"
@@ -18,38 +20,86 @@
       Measure
     </q-tooltip>
   </q-btn>
-
-  <!-- Mobile -->
-  <q-btn
-    v-if="$q.platform.is.mobile"
-    round
-    color="secondary"
-    icon="sym_o_straighten"
-    text-color="primary"
-    @click="addMeasure()"
-  />
 </template>
 
 <script setup lang="ts">
-import { Modify } from 'ol/interaction.js';
+import { Draw } from 'ol/interaction.js';
 import VectorSource from 'ol/source/Vector';
 import { useMapStore } from 'src/stores/map-store';
+import Tooltip from 'ol-ext/overlay/Tooltip';
 
 const mapStore = useMapStore();
+const measureLayerSource = new VectorSource();
+const drawInteraction = initializeDraw();
+const tooltipInformation = initializeTooltip();
 let isActive = false;
-const modify = new Modify({ source: new VectorSource() });
 
+/**
+ * Initialize drawer
+ */
+function initializeDraw(): Draw {
+  const draw = new Draw({
+    source: measureLayerSource,
+    type: 'LineString',
+  });
+  draw.set('name', 'drawInteraction');
+  draw.setActive(false);
+  mapStore.map.addInteraction(draw);
+  return draw;
+}
+
+/**
+ * Initialize tooltip information
+ */
+function initializeTooltip(): Tooltip {
+  const tooltip = new Tooltip({
+    popupClass: 'measure-tooltip',
+  });
+  mapStore.map.addOverlay(tooltip);
+  return tooltip;
+}
+
+/**
+ * Manage measure tool
+ */
 function addMeasure(): void {
+  // Enable tool
   if (!isActive) {
-    console.log("lancement de l'outil");
-    mapStore.map.addInteraction(modify);
-    isActive = true;
-  } else {
-    console.log("desactivation de l'outil");
-    mapStore.map.removeInteraction(modify);
-    isActive = false;
+    drawInteraction.setActive(true);
+    isActive = !isActive;
+
+    drawInteraction.on(
+      'drawstart',
+      tooltipInformation.setFeature.bind(tooltipInformation)
+    );
+
+    drawInteraction.on(['drawend', 'drawabort'], () => {
+      tooltipInformation.removeFeature();
+      drawInteraction.setActive(false);
+      isActive = !isActive;
+    });
+  }
+
+  // Disable tool
+  else {
+    isActive = !isActive;
+    tooltipInformation.removeFeature();
+    drawInteraction.setActive(false);
   }
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.measure-tooltip {
+  background-color: $secondary;
+  color: $accent;
+  margin: 25px;
+  width: 100px;
+  height: 50px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+</style>
