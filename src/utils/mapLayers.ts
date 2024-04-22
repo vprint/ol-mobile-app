@@ -1,6 +1,7 @@
 import { Map } from 'ol';
 import {
   BACKGROUND_LAYERS_SETTINGS,
+  VECTOR_TILE_LAYERS_SETTINGS,
   WMS_LAYERS_SETTINGS,
 } from './params/layersSettings';
 import TileLayer from 'ol/layer/Tile';
@@ -8,7 +9,10 @@ import XYZ from 'ol/source/XYZ';
 import LayerGroup from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
 import { ImageWMS } from 'ol/source';
+import VectorTileSource from 'ol/source/VectorTile';
+import MVT from 'ol/format/MVT';
 import { APP_SETTINGS } from './params/app';
+import VectorTileLayer from 'ol/layer/VectorTile';
 
 /**
  * Add background layers to the map
@@ -83,6 +87,40 @@ export function addWMSLayers(map: Map): void {
       layers: WMSLayers,
       properties: {
         title: 'Raster',
+      },
+    })
+  );
+}
+
+export function addVectorTileLayers(map: Map): void {
+  const VTLayers: VectorTileLayer[] = [];
+
+  VECTOR_TILE_LAYERS_SETTINGS.forEach((layer) => {
+    VTLayers.push(
+      new VectorTileLayer({
+        source: new VectorTileSource({
+          format: new MVT({
+            idProperty: 'id_site',
+          }),
+          url: `${APP_SETTINGS.vector_tile_server}/${layer.name}/{z}/{x}/{y}.pbf`,
+          attributions: layer.attribution,
+        }),
+        zIndex: layer.zIndex,
+        properties: {
+          name: layer.name,
+        },
+        preload: Infinity,
+        renderMode: 'hybrid',
+        visible: layer.visible,
+      })
+    );
+  });
+
+  map.addLayer(
+    new LayerGroup({
+      layers: VTLayers,
+      properties: {
+        title: 'Data',
       },
     })
   );

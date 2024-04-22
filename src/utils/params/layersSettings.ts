@@ -8,19 +8,19 @@ export interface ILayer {
   visible: boolean;
 }
 
-export interface IBackgroundLayerType extends ILayer {
+export interface IBackgroundLayer extends ILayer {
   url: string;
   img: string;
   token?: string;
 }
 
-export interface IRasterLayerType extends ILayer {
+export interface IRasterLayer extends ILayer {
   description: string;
   editable: boolean;
   dynamic: boolean;
 }
 
-export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayerType[] = [
+export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayer[] = [
   {
     name: 'Basic',
     id: 'jawg-streets',
@@ -81,7 +81,7 @@ export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayerType[] = [
   },
 ];
 
-export const WMS_LAYERS_SETTINGS: IRasterLayerType[] = [
+export const WMS_LAYERS_SETTINGS: IRasterLayer[] = [
   {
     zIndex: 2,
     id: 'DEM',
@@ -103,5 +103,15 @@ export const WMS_LAYERS_SETTINGS: IRasterLayerType[] = [
     visible: false,
     editable: true,
     dynamic: false,
+  },
+];
+
+export const VECTOR_TILE_LAYERS_SETTINGS: ILayer[] = [
+  {
+    name: 'sites',
+    id: 'sites',
+    attribution: ['Données cartographiques | <b>EFEO</b>'],
+    zIndex: 5,
+    visible: true,
   },
 ];
