@@ -20,7 +20,11 @@
     <!-- Measure button -->
     <MeasureComponent v-if="$q.platform.is.desktop"></MeasureComponent>
 
-    <q-separator vertical style="margin: 2px"></q-separator>
+    <q-separator
+      v-if="$q.platform.is.desktop"
+      vertical
+      style="margin: 2px"
+    ></q-separator>
 
     <!-- Coordinates -->
     <q-btn v-if="$q.platform.is.desktop" fab flat icon="mdi-map-marker-check">

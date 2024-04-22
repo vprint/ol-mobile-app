@@ -56,8 +56,8 @@ watch(
   .global-card {
     width: 100%;
     height: 50%;
-    left: 0;
-    bottom: 0;
+    left: 0px;
+    bottom: -2px;
   }
 }
 </style>
