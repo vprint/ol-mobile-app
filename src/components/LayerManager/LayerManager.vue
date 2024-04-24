@@ -33,13 +33,14 @@ const mapStore = useMapStore();
 onMounted(() => {
   mapStore.map.addControl(
     new LayerSwitcher({
-      //target: document.getElementById('layer-manager') ?? undefined,
+      target: document.getElementById('layer-manager') ?? undefined,
     })
   );
 });
 </script>
 
 <style lang="scss">
+@import 'ol-ext/dist/ol-ext.css';
 @import 'font-awesome/css/font-awesome.min.css';
 
 .ol-layerswitcher.ol-collapsed {
@@ -88,12 +89,12 @@ onMounted(() => {
   content: '';
   width: 100%;
   height: 3px;
-  background: #017eff;
+  background: $primary;
   position: absolute;
   top: 50%;
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
-  border: 1px solid #017eff;
+  border: 1px solid $primary;
   box-sizing: border-box;
 }
 .ol-layerswitcher .layerswitcher-opacity .layerswitcher-opacity-cursor {
@@ -115,7 +116,7 @@ onMounted(() => {
   height: 16px;
   left: -1px;
   border-radius: 0;
-  background: #017eff;
+  background: $primary;
 }
 .ol-layerswitcher .layerswitcher-opacity-label {
   display: block;
@@ -137,7 +138,7 @@ onMounted(() => {
   content: none;
 }
 .ol-layerswitcher .layerup:before {
-  color: #017eff;
+  color: $primary;
   content: '\F0C9';
   font-family: FontAwesome;
   border: 0;
@@ -155,8 +156,8 @@ onMounted(() => {
 }
 .ol-layerswitcher [type='checkbox']:checked + label:before,
 .ol-layerswitcher [type='radio']:checked + label:before {
-  background: #017eff;
-  border-color: #017eff;
+  background: $primary;
+  border-color: $primary;
 }
 .ol-layerswitcher [type='checkbox']:checked + label:after {
   content: '\2713';
@@ -178,20 +179,20 @@ onMounted(() => {
 }
 
 .ol-control.ol-layerswitcher {
-  background: #017eff;
+  background: $primary;
   right: 0;
   border-radius: 0;
 }
 .ol-layerswitcher button,
 .ol-layerswitcher button:focus,
 .ol-layerswitcher button:hover {
-  background: #017eff;
+  background: $primary;
   border: 0;
   user-select: none;
   outline: none;
 }
 .ol-layerswitcher button:before {
-  background: #017eff;
+  background: $primary;
   -webkit-box-shadow: 0.1em 0.1em #fff;
   box-shadow: 0.1em 0.1em #fff;
 }
@@ -225,14 +226,14 @@ onMounted(() => {
 .ol-layerswitcher .expend-layers:after,
 .ol-layerswitcher .collapse-layers:before,
 .ol-layerswitcher .collapse-layers:after {
-  background: #017eff;
+  background: $primary;
 }
 .ol-layerswitcher .panel ul {
   overflow: visible;
 }
 .ol-layerswitcher .layerInfo {
   right: 0;
-  background: #017eff;
+  background: $primary;
 }
 
 .ol-control.ol-layerswitcher .ol-switchertopdiv,

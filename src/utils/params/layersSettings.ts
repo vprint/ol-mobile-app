@@ -1,17 +1,26 @@
 import { Token } from './token';
 
-export interface IBackgroundLayerType {
+export interface ILayer {
   name: string;
   id: string;
-  url: string;
-  img: string;
   attribution: string[];
-  token?: string;
   zIndex: number;
   visible: boolean;
 }
 
-export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayerType[] = [
+export interface IBackgroundLayer extends ILayer {
+  url: string;
+  img: string;
+  token?: string;
+}
+
+export interface IRasterLayer extends ILayer {
+  description: string;
+  editable: boolean;
+  dynamic: boolean;
+}
+
+export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayer[] = [
   {
     name: 'Basic',
     id: 'jawg-streets',
@@ -68,6 +77,41 @@ export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayerType[] = [
       'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
     ],
     zIndex: 1,
+    visible: true,
+  },
+];
+
+export const WMS_LAYERS_SETTINGS: IRasterLayer[] = [
+  {
+    zIndex: 2,
+    id: 'DEM',
+    name: 'Elevation',
+    description:
+      "Couche d'élévation obtenue à partir d'une interpolation des données LiDAR",
+    attribution: ['Données LiDAR | <b>EFEO</b>'],
+    visible: true,
+    editable: true,
+    dynamic: true,
+  },
+  {
+    zIndex: 3,
+    id: 'SVF',
+    name: 'Sky-View-Factor',
+    description:
+      'Le Sky-View-Factor est une méthode de visualisation des données altimétrique appréciée des archéologue. Elle permet de visualiser les zones enclavées dans des teintes sombres et les zones surélevées dans des teintes claires',
+    attribution: ['Données LiDAR | <b>EFEO</b>'],
+    visible: false,
+    editable: true,
+    dynamic: false,
+  },
+];
+
+export const VECTOR_TILE_LAYERS_SETTINGS: ILayer[] = [
+  {
+    name: 'sites',
+    id: 'sites',
+    attribution: ['Données cartographiques | <b>EFEO</b>'],
+    zIndex: 5,
     visible: true,
   },
 ];

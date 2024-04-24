@@ -1,6 +1,9 @@
 <template>
   <!-- Toolbar -->
-  <q-toolbar class="bg-secondary text-primary shadow-2">
+  <q-toolbar
+    v-if="mapStore.isInitialized"
+    class="bg-secondary text-primary shadow-2"
+  >
     <!-- Logo -->
     <q-avatar square>
       <q-img :src="'icons/efeo_logo.png'"></q-img>
@@ -15,18 +18,13 @@
     <q-space></q-space>
 
     <!-- Measure button -->
-    <q-btn v-if="$q.platform.is.desktop" fab flat icon="sym_o_straighten">
-      <q-tooltip
-        anchor="bottom middle"
-        self="bottom middle"
-        transition-show="scale"
-        transition-hide="scale"
-        :delay="500"
-        style="border-radius: 0"
-      >
-        Measure
-      </q-tooltip>
-    </q-btn>
+    <MeasureComponent v-if="$q.platform.is.desktop"></MeasureComponent>
+
+    <q-separator
+      v-if="$q.platform.is.desktop"
+      vertical
+      style="margin: 2px"
+    ></q-separator>
 
     <!-- Coordinates -->
     <q-btn v-if="$q.platform.is.desktop" fab flat icon="mdi-map-marker-check">
@@ -43,24 +41,7 @@
     </q-btn>
 
     <!-- Layer button -->
-    <q-btn
-      v-if="$q.platform.is.desktop"
-      fab
-      flat
-      icon="mdi-layers"
-      @click="componentStore.changeVisibility()"
-    >
-      <q-tooltip
-        anchor="bottom middle"
-        self="bottom middle"
-        transition-show="scale"
-        transition-hide="scale"
-        :delay="500"
-        style="border-radius: 0"
-      >
-        Manage layers
-      </q-tooltip>
-    </q-btn>
+    <LayerManagerButton v-if="$q.platform.is.desktop"></LayerManagerButton>
 
     <!-- Searchbox -->
     <q-select
@@ -89,12 +70,14 @@
 <script setup lang="ts">
 import { APP_SETTINGS } from '../../utils/params/app';
 import { ref } from 'vue';
-import { useComponentStore } from 'src/stores/component-store';
+import MeasureComponent from '../MeasureComponent/MeasureComponent.vue';
+import LayerManagerButton from '../LayerManager/LayerManagerButton.vue';
+import { useMapStore } from 'src/stores/map-store';
 
-const componentStore = useComponentStore();
 const stringOptions = ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'];
 const options = ref(stringOptions);
 const model = ref(null);
+const mapStore = useMapStore();
 
 /**
  * Filters entries according to the text entered by the user
