@@ -18,9 +18,21 @@ export const useSiteStore = defineStore('sites', {
   },
 
   actions: {
+    /**
+     * Set active site and open site manager
+     * @param site Site
+     */
     setSite(site: Site): void {
-      this._site = site;
-      componentStore.setWidget(true, 'site-manager');
+      if (componentStore.widget.visibility) {
+        componentStore.setWidget(false, '');
+        setTimeout(() => {
+          this._site = site;
+          componentStore.setWidget(true, 'site-manager');
+        }, 100);
+      } else {
+        this._site = site;
+        componentStore.setWidget(true, 'site-manager');
+      }
     },
   },
 });
