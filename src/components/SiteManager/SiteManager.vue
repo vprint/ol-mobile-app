@@ -12,7 +12,7 @@
         flat
         round
         icon="close"
-        @click="componentStore.setWidget(false, '')"
+        @click="siteStore.clearSite"
       />
     </q-bar>
 
@@ -35,12 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import { useComponentStore } from '../../stores/component-store';
 import { useSiteStore } from '../../stores/site-store';
 import { date } from 'quasar';
 import { SITE_TYPE_REFS_PARAMS } from '../../utils/params/typeRefsSettings';
 
-const componentStore = useComponentStore();
 const siteStore = useSiteStore();
 
 /**

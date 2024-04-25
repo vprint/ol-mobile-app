@@ -1,5 +1,8 @@
 import { GeoJsonProperties } from 'geojson';
 
+/**
+ * Site
+ */
 export class Site {
   public siteId: number;
   public englishName: string;
