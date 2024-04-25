@@ -5,7 +5,21 @@
     :leave-active-class="exitAnimation"
   >
     <KeepAlive>
-      <LayerManager v-if="displayComponent"></LayerManager>
+      <LayerManager
+        v-if="widget.visibility && widget.widgetName === 'layer-manager'"
+      ></LayerManager>
+    </KeepAlive>
+  </transition>
+
+  <transition
+    appear
+    :enter-active-class="enterAnimation"
+    :leave-active-class="exitAnimation"
+  >
+    <KeepAlive>
+      <SiteManager
+        v-if="widget.visibility && widget.widgetName === 'site-manager'"
+      ></SiteManager>
     </KeepAlive>
   </transition>
 </template>
@@ -15,10 +29,11 @@ import { useQuasar } from 'quasar';
 import { useComponentStore } from 'src/stores/component-store';
 import { ref, watch } from 'vue';
 import LayerManager from '../LayerManager/LayerManager.vue';
+import SiteManager from '../SiteManager/SiteManager.vue';
 
 const componentStore = useComponentStore();
 const $q = useQuasar();
-const displayComponent = ref(false);
+const widget = ref(componentStore.widget);
 
 // set enter animation type (depend of platform)
 const enterAnimation = $q.platform.is.desktop
@@ -36,7 +51,7 @@ const exitAnimation = $q.platform.is.desktop
 watch(
   () => componentStore.widget,
   (newWidget) => {
-    displayComponent.value = newWidget.visibility;
+    widget.value = newWidget;
   },
   { deep: true }
 );
