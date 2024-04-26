@@ -1,4 +1,5 @@
 <template>
+  <!-- Card -->
   <q-card square class="global-card">
     <q-bar
       class="bg-accent text-white row items-center no-wrap header-card header"
@@ -7,6 +8,7 @@
 
       <q-space />
 
+      <!-- Close button -->
       <q-btn
         v-close-popup
         flat
@@ -22,20 +24,7 @@
       id="site-manager"
       class="bg-secondary"
     >
-      <!-- <q-list v-if="!editionMode" bordered separator>
-        <q-item v-for="siteInfo in siteInformationList" :key="siteInfo.key">
-          <q-item-section>
-            <q-item-label>
-              {{ siteInfo.value }}
-            </q-item-label>
-            <q-item-label v-if="!editionMode" caption>{{
-              siteInfo.formattedKey
-            }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list> -->
-
-      <!-- <q-form v-if="editionMode"> -->
+      <!-- Form. The form is dynamically created from siteInformation list-->
       <q-form>
         <div
           v-for="siteInfo in siteInformationList"
@@ -53,14 +42,42 @@
           />
         </div>
       </q-form>
+
+      <!-- Action buttons -->
       <div class="q-pa-md q-gutter-sm row justify-end">
         <q-btn
+          v-if="!editionMode"
+          class="site-button"
+          square
           color="primary"
-          icon="edit"
           label="Edit"
           @click="editionMode = !editionMode"
         />
+        <q-btn
+          v-if="editionMode"
+          class="site-button"
+          outline
+          square
+          color="primary"
+          label="Cancel"
+          @click="editionMode = !editionMode"
+        />
+        <q-btn
+          v-if="editionMode"
+          class="site-button"
+          square
+          color="primary"
+          label="Save"
+          @click="confirmDialogManager(true, true)"
+        />
       </div>
+
+      <!-- Dialog -->
+      <ConfirmDialog
+        :visible="confirmDialogVisibility"
+        @update:confirm="confirmDialogManager(false, false)"
+        @update:cancel="confirmDialogManager(false, true)"
+      ></ConfirmDialog>
     </q-card-section>
   </q-card>
 </template>
@@ -73,6 +90,7 @@ import {
   SITE_TYPE_REFS_PARAMS,
 } from '../../utils/params/typeRefsSettings';
 import { onMounted, ref, Ref } from 'vue';
+import ConfirmDialog from './ConfirmDialog.vue';
 
 export interface ISiteInfo {
   key: string;
@@ -84,16 +102,19 @@ const siteStore = useSiteStore();
 const site = siteStore.site;
 const siteInformationList: Ref<ISiteInfo[]> = ref([]);
 const editionMode = ref(false);
+const confirmDialogVisibility = ref(false);
 
 onMounted(() => {
   initializeSiteInformation();
 });
 
+/**
+ * Initialize site information object. This object is used to dynamically create the form
+ */
 function initializeSiteInformation(): void {
   Object.entries(SITE_TYPE_REFS_PARAMS).forEach(([key, value]) => {
     if (site) {
       const valueType = getTypeOfValue(site[key as ISiteTypeRefParams]);
-
       const siteObject: ISiteInfo = {
         key: key,
         formattedKey: valueFormatter(site[key as ISiteTypeRefParams]),
@@ -136,9 +157,21 @@ function formatDate(inputDate: Date): string {
 function getTypeOfValue(inputValue: unknown): string {
   return inputValue instanceof Date ? 'date' : typeof inputValue;
 }
+
+/**
+ * Manage dialog event
+ * @param visibility Set the dialog visibility
+ * @param edition Set form edition mode
+ */
+function confirmDialogManager(visibility: boolean, edition: boolean): void {
+  editionMode.value = edition;
+  confirmDialogVisibility.value = visibility;
+}
 </script>
 
 <style lang="scss">
+@import 'font-awesome/css/font-awesome.min.css';
+
 .header {
   position: sticky;
   top: 0px;
@@ -148,6 +181,10 @@ function getTypeOfValue(inputValue: unknown): string {
 
 .form-element {
   margin-bottom: 10px;
+}
+
+.site-button {
+  width: 90px;
 }
 
 .q-field {
