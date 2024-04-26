@@ -18,7 +18,7 @@ import VectorTileLayer from 'ol/layer/VectorTile';
  * Add background layers to the map
  * @param map OpenLayers map
  */
-export function addBackgroundLayers(map: Map): void {
+function addBackgroundLayers(map: Map): void {
   const backgroundLayers: TileLayer<XYZ>[] = [];
 
   BACKGROUND_LAYERS_SETTINGS.forEach((layer) => {
@@ -56,14 +56,14 @@ export function addBackgroundLayers(map: Map): void {
  * Add WMS layers to the map
  * @param map OpenLayers map
  */
-export function addWMSLayers(map: Map): void {
+function addWMSLayers(map: Map): void {
   const WMSLayers: ImageLayer<ImageWMS>[] = [];
 
   WMS_LAYERS_SETTINGS.forEach((layer) => {
     WMSLayers.push(
       new ImageLayer({
         source: new ImageWMS({
-          url: `${APP_SETTINGS.qgis_server}/wms?`,
+          url: `${APP_SETTINGS.qgisServer}/wms?`,
           params: {
             LAYERS: `${layer.id}`,
           },
@@ -92,7 +92,11 @@ export function addWMSLayers(map: Map): void {
   );
 }
 
-export function addVectorTileLayers(map: Map): void {
+/**
+ * Add vector tile layers to the map
+ * @param map OpenLayers map
+ */
+function addVectorTileLayers(map: Map): void {
   const VTLayers: VectorTileLayer[] = [];
 
   VECTOR_TILE_LAYERS_SETTINGS.forEach((layer) => {
@@ -102,7 +106,7 @@ export function addVectorTileLayers(map: Map): void {
           format: new MVT({
             idProperty: 'id_site',
           }),
-          url: `${APP_SETTINGS.vector_tile_server}/${layer.name}/{z}/{x}/{y}.pbf`,
+          url: `${APP_SETTINGS.vectorTileServer}/${layer.name}/{z}/{x}/{y}.pbf`,
           attributions: layer.attribution,
         }),
         zIndex: layer.zIndex,
@@ -124,4 +128,14 @@ export function addVectorTileLayers(map: Map): void {
       },
     })
   );
+}
+
+/**
+ * Add application layer to the map
+ * @param map OpenLayers map
+ */
+export function addApplicationLayers(map: Map): void {
+  addBackgroundLayers(map);
+  addWMSLayers(map);
+  addVectorTileLayers(map);
 }

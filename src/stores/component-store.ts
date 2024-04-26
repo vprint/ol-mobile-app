@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Widget } from 'src/model/widget';
+import { IWidgetName, Widget } from 'src/model/widget';
 
 export const useComponentStore = defineStore('component', {
   state: () => ({
@@ -10,10 +10,13 @@ export const useComponentStore = defineStore('component', {
   },
   actions: {
     /**
-     * set widget visibility
+     * Menage widget visibility
+     * @param visibility Widget visibility
+     * @param widgetName Name of the widget to display
      */
-    changeVisibility(): void {
-      this._widget.visibility = !this._widget.visibility;
+    setWidget(visibility: boolean, widgetName: IWidgetName): void {
+      this._widget.visibility = visibility;
+      this._widget.widgetName = widgetName;
     },
   },
 });

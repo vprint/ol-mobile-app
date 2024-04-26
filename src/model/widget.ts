@@ -1,10 +1,12 @@
+export type IWidgetName = 'layer-manager' | 'site-manager' | '';
+
 export class Widget {
   private _visibility: boolean;
-  private _element: string;
+  private _widgetName: IWidgetName;
 
   constructor() {
     this._visibility = false;
-    this._element = '';
+    this._widgetName = '';
   }
 
   get visibility(): boolean {
@@ -15,11 +17,11 @@ export class Widget {
     this._visibility = value;
   }
 
-  get element(): string {
-    return this._element;
+  get widgetName(): IWidgetName {
+    return this._widgetName;
   }
 
-  set element(value: string) {
-    this._element = value;
+  set widgetName(value: IWidgetName) {
+    this._widgetName = value;
   }
 }

@@ -11,7 +11,7 @@
 
     <!-- Title (desktop display only) -->
     <q-toolbar-title v-if="$q.platform.is.desktop">
-      {{ APP_SETTINGS.name }}
+      {{ APP_SETTINGS.applicationName }}
     </q-toolbar-title>
 
     <!-- Space -->
@@ -43,55 +43,18 @@
     <!-- Layer button -->
     <LayerManagerButton v-if="$q.platform.is.desktop"></LayerManagerButton>
 
-    <!-- Searchbox -->
-    <q-select
-      v-model="model"
-      hide-selected
-      use-input
-      fill-input
-      label-color="grey-8"
-      color="primary"
-      bg-color="white"
-      popup-content-class="text-grey-8"
-      class="searchbox"
-      input-debounce="0"
-      outlined
-      hide-dropdown-icon
-      :options="options"
-      @filter="filterFn"
-    >
-      <template #append>
-        <q-icon name="search" class="cursor-pointer"></q-icon>
-      </template>
-    </q-select>
+    <SiteSearchBox></SiteSearchBox>
   </q-toolbar>
 </template>
 
 <script setup lang="ts">
 import { APP_SETTINGS } from '../../utils/params/app';
-import { ref } from 'vue';
 import MeasureComponent from '../MeasureComponent/MeasureComponent.vue';
 import LayerManagerButton from '../LayerManager/LayerManagerButton.vue';
 import { useMapStore } from 'src/stores/map-store';
+import SiteSearchBox from './SiteSearchBox.vue';
 
-const stringOptions = ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'];
-const options = ref(stringOptions);
-const model = ref(null);
 const mapStore = useMapStore();
-
-/**
- * Filters entries according to the text entered by the user
- * @param val value entered by user
- * @param update update
- */
-function filterFn(val: string, update: (fn: () => void) => void): void {
-  update(() => {
-    const needle = val.toLowerCase();
-    options.value = stringOptions.filter((v) =>
-      v.toLowerCase().includes(needle)
-    );
-  });
-}
 </script>
 
 <style scoped>

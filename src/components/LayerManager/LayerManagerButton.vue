@@ -5,7 +5,7 @@
     fab
     flat
     icon="mdi-layers"
-    @click="componentStore.changeVisibility()"
+    @click="componentStore.setWidget(true, 'layer-manager')"
   >
     <q-tooltip
       anchor="bottom middle"
@@ -26,7 +26,7 @@
     color="secondary"
     icon="mdi-layers"
     text-color="primary"
-    @click="componentStore.changeVisibility()"
+    @click="componentStore.setWidget(true, 'layer-manager')"
   >
   </q-btn>
 </template>

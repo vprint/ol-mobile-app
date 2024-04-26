@@ -12,7 +12,7 @@
         flat
         round
         icon="close"
-        @click="componentStore.changeVisibility()"
+        @click="componentStore.setWidget(false, '')"
       />
     </q-card-section>
     <!-- Content -->

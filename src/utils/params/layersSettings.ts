@@ -1,4 +1,4 @@
-import { Token } from './token';
+import { TOKEN } from './tokenSettings';
 
 export interface ILayer {
   name: string;
@@ -20,6 +20,9 @@ export interface IRasterLayer extends ILayer {
   dynamic: boolean;
 }
 
+/**
+ * List of application background layers
+ */
 export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayer[] = [
   {
     name: 'Basic',
@@ -29,7 +32,7 @@ export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayer[] = [
     attribution: [
       '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>',
     ],
-    token: Token.jawgs,
+    token: TOKEN.jawgs,
     zIndex: 1,
     visible: false,
   },
@@ -41,7 +44,7 @@ export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayer[] = [
     attribution: [
       '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>',
     ],
-    token: Token.jawgs,
+    token: TOKEN.jawgs,
     zIndex: 1,
     visible: false,
   },
@@ -53,7 +56,7 @@ export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayer[] = [
     attribution: [
       '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>',
     ],
-    token: Token.jawgs,
+    token: TOKEN.jawgs,
     zIndex: 1,
     visible: false,
   },
@@ -81,6 +84,9 @@ export const BACKGROUND_LAYERS_SETTINGS: IBackgroundLayer[] = [
   },
 ];
 
+/**
+ * List of application WMS layers
+ */
 export const WMS_LAYERS_SETTINGS: IRasterLayer[] = [
   {
     zIndex: 2,
@@ -106,6 +112,9 @@ export const WMS_LAYERS_SETTINGS: IRasterLayer[] = [
   },
 ];
 
+/**
+ * List of application vector tiles layers
+ */
 export const VECTOR_TILE_LAYERS_SETTINGS: ILayer[] = [
   {
     name: 'sites',

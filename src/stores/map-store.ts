@@ -21,20 +21,5 @@ export const useMapStore = defineStore('map', {
       this._map = map;
       this._isInitialized = true;
     },
-
-    /**
-     * enable interaction by name
-     * @param name Name of the interaction to remove
-     */
-    setActiveInteractionsByName(name: string, active: boolean): void {
-      this.$state._map
-        .getInteractions()
-        .getArray()
-        .forEach((interaction) => {
-          if (interaction.get('name') === name) {
-            interaction.setActive(active);
-          }
-        });
-    },
   },
 });
