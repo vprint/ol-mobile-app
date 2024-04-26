@@ -27,3 +27,5 @@ export enum SITE_TYPE_REFS_PARAMS {
   featureTypeId = 'Feature type',
   studyArea = 'Study area',
 }
+
+export type ISiteTypeRefParams = keyof typeof SITE_TYPE_REFS_PARAMS;

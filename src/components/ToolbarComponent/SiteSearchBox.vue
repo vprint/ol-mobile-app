@@ -47,6 +47,9 @@ const options: Ref<ISearchItems[]> = ref([]);
 const model: Ref<string | null> = ref(null);
 const isReady = ref(false);
 
+/**
+ * Listen for site change
+ */
 watch(
   () => siteStore.site,
   (newSite) => {
@@ -83,12 +86,16 @@ onMounted(async () => {
 function filterFn(val: string, update: (fn: () => void) => void): void {
   update(() => {
     const needle = val.toLowerCase();
-    options.value = searchList.filter((v) =>
-      v.label.toLowerCase().includes(needle)
-    );
+    options.value = searchList
+      .filter((v) => v.label.toLowerCase().includes(needle))
+      .slice(0, 5);
   });
 }
 
+/**
+ * Fetch and set site after selecting it in the list
+ * @param site
+ */
 function selectSite(site: ISearchItems | undefined): void {
   if (site) {
     siteStore.fetchAndSetSite(site.value);
