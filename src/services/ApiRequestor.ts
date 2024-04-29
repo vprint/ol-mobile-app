@@ -1,8 +1,7 @@
 import wretch from 'wretch';
-import { Feature } from 'geojson';
 import { Site } from 'src/model/site';
 import { APP_SETTINGS } from 'src/utils/params/app';
-import { ISiteList } from 'src/components/ToolbarComponent/SiteSearchBox.vue';
+import { ISite, ISiteList } from 'src/interface/ISite';
 
 /**
  * Json getter
@@ -21,19 +20,19 @@ async function getJSON<T>(url: string): Promise<T | undefined> {
 }
 
 /**
- * Get site by id
- * @param site_id site_id to request
- * @returns Site
+ * Get full site information by id
+ * @param siteId SiteId
+ * @returns
  */
-async function getSiteById(site_id: number): Promise<Site | undefined> {
+async function getSiteById(siteId: number): Promise<Site | undefined> {
   let site: Site | undefined = undefined;
 
-  const result = await getJSON<Feature>(
-    `${APP_SETTINGS.featureServer}/collections/public.sites/items/${site_id}.json`
+  const result = await getJSON<ISite[]>(
+    `${APP_SETTINGS.featureServer}/functions/public.get_site_by_id/items.json?id=${siteId}`
   );
 
-  if (result?.properties) {
-    site = new Site(result.properties);
+  if (result) {
+    site = new Site(result[0]);
   }
 
   return site;
