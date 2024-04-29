@@ -24,7 +24,7 @@ export enum SITE_TYPE_REFS_PARAMS {
   modificationDate = 'Modification date',
   userCreation = 'Created by',
   userModification = 'Modified by',
-  featureTypeId = 'Feature type',
+  featureType = 'Feature type',
   studyArea = 'Study area',
 }
 

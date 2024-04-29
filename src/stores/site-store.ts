@@ -49,6 +49,9 @@ export const useSiteStore = defineStore('sites', {
       }
     },
 
+    /**
+     * Clear site in store and close widget
+     */
     clearSite(): void {
       this._site = undefined;
       componentStore.setWidget(false, '');
