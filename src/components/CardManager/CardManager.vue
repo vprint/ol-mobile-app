@@ -72,5 +72,12 @@ watch(
     left: 0px;
     bottom: -2px;
   }
+
+  .global-card-expended {
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    bottom: -2px;
+  }
 }
 </style>

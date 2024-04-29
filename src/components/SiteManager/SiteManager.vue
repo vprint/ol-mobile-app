@@ -1,12 +1,21 @@
 <template>
   <!-- Card -->
-  <q-card square class="global-card">
+  <q-card square :class="expended ? 'global-card-expended' : 'global-card'">
     <q-bar
       class="bg-accent text-white row items-center no-wrap header-card header"
     >
-      <div>Sites</div>
+      <div>{{ `${site?.englishName} - (${site?.khmerName})` }}</div>
 
       <q-space />
+
+      <q-btn
+        v-if="$q.platform.is.mobile"
+        v-close-popup
+        flat
+        round
+        :icon="expended ? 'expand_more' : 'expand_less'"
+        @click="expended = !expended"
+      />
 
       <!-- Close button -->
       <q-btn
@@ -24,23 +33,131 @@
       id="site-manager"
       class="bg-secondary"
     >
-      <!-- Form. The form is dynamically created from siteInformation list-->
       <q-form>
-        <div
-          v-for="siteInfo in siteInformationList"
-          :key="siteInfo.key"
+        <!-- Alternative name -->
+        <q-input
+          v-model="site!.alternativeName"
           class="form-element"
+          outlined
+          square
+          color="accent"
+          :label="SITE_TYPE_REFS_PARAMS.alternativeName"
+          stack-label
+          dense
+          :readonly="editionMode ? false : true"
+        />
+
+        <!-- French name -->
+        <q-input
+          v-model="site!.frenchName"
+          class="form-element"
+          outlined
+          square
+          color="accent"
+          :label="SITE_TYPE_REFS_PARAMS.frenchName"
+          stack-label
+          dense
+          :readonly="editionMode ? false : true"
+        />
+
+        <!-- Khmer name -->
+        <q-input
+          v-model="site!.khmerName"
+          class="form-element"
+          outlined
+          square
+          color="accent"
+          :label="SITE_TYPE_REFS_PARAMS.khmerName"
+          stack-label
+          dense
+          :readonly="editionMode ? false : true"
+        />
+
+        <!-- alternative khmer name -->
+        <q-input
+          v-model="site!.alternativeKhmerName"
+          class="form-element"
+          outlined
+          square
+          color="accent"
+          :label="SITE_TYPE_REFS_PARAMS.alternativeKhmerName"
+          stack-label
+          dense
+          :readonly="editionMode ? false : true"
+        />
+        <q-separator class="form-separator"></q-separator>
+
+        <!-- description -->
+        <q-input
+          v-model="site!.description"
+          class="form-element"
+          outlined
+          square
+          color="accent"
+          :label="SITE_TYPE_REFS_PARAMS.description"
+          stack-label
+          dense
+          :readonly="editionMode ? false : true"
+        />
+
+        <!-- ikId -->
+        <q-input
+          v-model="site!.ikId"
+          class="form-element"
+          outlined
+          square
+          color="accent"
+          :label="SITE_TYPE_REFS_PARAMS.ikId"
+          stack-label
+          dense
+          :readonly="editionMode ? false : true"
+        />
+
+        <!-- mhId -->
+        <q-input
+          v-model="site!.mhId"
+          class="form-element"
+          outlined
+          square
+          color="accent"
+          :label="SITE_TYPE_REFS_PARAMS.mhId"
+          stack-label
+          dense
+          :readonly="editionMode ? false : true"
+        />
+
+        <!-- Verified TODO: A IMPLEMENTER-->
+
+        <!-- Verification date -->
+        <q-input
+          v-model="site!.verificationDate"
+          class="form-element"
+          outlined
+          square
+          color="accent"
+          :label="SITE_TYPE_REFS_PARAMS.verificationDate"
+          stack-label
+          dense
+          :readonly="editionMode ? false : true"
+          mask="date"
+          :rules="['date']"
         >
-          <q-input
-            v-model="siteInfo.formattedKey"
-            outlined
-            square
-            :label="siteInfo.value"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
-          />
-        </div>
+          <template #append>
+            <q-icon v-if="editionMode" name="event" class="cursor-pointer">
+              <q-popup-proxy
+                cover
+                transition-show="scale"
+                transition-hide="scale"
+              >
+                <q-date v-model="site!.verificationDate">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
       </q-form>
 
       <!-- Action buttons -->
@@ -91,46 +208,76 @@ import {
 } from '../../utils/params/typeRefsSettings';
 import { onMounted, ref, Ref } from 'vue';
 import ConfirmDialog from './ConfirmDialog.vue';
+import { IResearcher } from 'src/interface/IResearcher';
+import { IDocument } from 'src/interface/IDocument';
+import { IBuildMaterial } from 'src/interface/IBuildMaterial';
+import { IArtefact } from 'src/interface/IArtefact';
 
 export interface ISiteInfo {
   key: string;
-  formattedKey: string;
+  formattedKey:
+    | string
+    | IResearcher
+    | IResearcher[]
+    | IDocument[]
+    | IArtefact[]
+    | IBuildMaterial[];
   value: string;
   type: string;
 }
 const siteStore = useSiteStore();
-const site = siteStore.site;
+const site = ref(siteStore.site);
 const siteInformationList: Ref<ISiteInfo[]> = ref([]);
 const editionMode = ref(false);
 const confirmDialogVisibility = ref(false);
+const expended = ref(false);
 
-onMounted(() => {
-  initializeSiteInformation();
-});
+// onMounted(() => {
+//   initializeSiteInformation();
+// });
 
 /**
  * Initialize site information object. This object is used to dynamically create the form
  */
-function initializeSiteInformation(): void {
-  Object.entries(SITE_TYPE_REFS_PARAMS).forEach(([key, value]) => {
-    if (site) {
-      const valueType = getTypeOfValue(site[key as ISiteTypeRefParams]);
-      const siteObject: ISiteInfo = {
-        key: key,
-        formattedKey: valueFormatter(site[key as ISiteTypeRefParams]),
-        value: value,
-        type: valueType,
-      };
-      siteInformationList.value.push(siteObject);
-    }
-  });
-}
+// function initializeSiteInformation(): void {
+//   Object.entries(SITE_TYPE_REFS_PARAMS).forEach(([key, value]) => {
+//     if (site.value) {
+//       const valueType = getTypeOfValue(site[key as ISiteTypeRefParams]);
+//       const siteObject: ISiteInfo = {
+//         key: key,
+//         formattedKey: valueFormatter(site[key as ISiteTypeRefParams]),
+//         value: value,
+//         type: valueType,
+//       };
+//       siteInformationList.value.push(siteObject);
+//     }
+//   });
+// }
+
+//TODO: Améliorer le formulaire pour se passer de cette fonction inélégante
 
 /**
  * Format value to display them in the form
  * @param inputValue Value to format
  */
-function valueFormatter(inputValue: string | Date | number | boolean): string {
+function valueFormatter(
+  inputValue:
+    | string
+    | Date
+    | number
+    | boolean
+    | IResearcher
+    | IResearcher[]
+    | IDocument[]
+    | IArtefact[]
+    | IBuildMaterial[]
+):
+  | string
+  | IResearcher
+  | IResearcher[]
+  | IDocument[]
+  | IArtefact[]
+  | IBuildMaterial[] {
   if (inputValue instanceof Date) {
     return formatDate(inputValue);
   } else if (typeof inputValue === 'number') {
@@ -170,7 +317,9 @@ function confirmDialogManager(visibility: boolean, edition: boolean): void {
 </script>
 
 <style lang="scss">
-@import 'font-awesome/css/font-awesome.min.css';
+.form-separator {
+  margin: 20px;
+}
 
 .header {
   position: sticky;
@@ -180,7 +329,8 @@ function confirmDialogManager(visibility: boolean, edition: boolean): void {
 }
 
 .form-element {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .site-button {
