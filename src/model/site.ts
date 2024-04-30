@@ -1,7 +1,6 @@
 import { Geometry } from 'ol/geom';
 import { IResearcher } from 'src/interface/IResearcher';
 import { ISite } from 'src/interface/ISite';
-import { format } from 'date-fns';
 
 /**
  * Site
@@ -17,7 +16,7 @@ export class Site {
   public ikId: number;
   public mhId: number;
   public verified: boolean;
-  public verificationDate: string;
+  public verificationDate: Date;
   public locatedBy: IResearcher;
   public ceramicsDetails: string;
   public ceramics: boolean;
@@ -28,8 +27,8 @@ export class Site {
   public cleared: boolean;
   public threatened: boolean;
   public databasingComments: string;
-  public creationDate: string;
-  public modificationDate: string;
+  public creationDate: Date;
+  public modificationDate: Date;
   public userCreation: string;
   public userModification: string;
   public featureType: string;
@@ -47,10 +46,7 @@ export class Site {
     this.ikId = Number(partialEntity.ikId);
     this.mhId = Number(partialEntity.mhId);
     this.verified = Boolean(partialEntity.verified);
-    this.verificationDate = format(
-      partialEntity.verificationDate,
-      'yyyy/MM/dd'
-    );
+    this.verificationDate = new Date(partialEntity.verificationDate);
     this.locatedBy = partialEntity.locatedBy;
     this.ceramicsDetails = partialEntity.ceramicsDetails;
     this.ceramics = Boolean(partialEntity.ceramics);
@@ -61,11 +57,8 @@ export class Site {
     this.cleared = Boolean(partialEntity.cleared);
     this.threatened = Boolean(partialEntity.threatened);
     this.databasingComments = partialEntity.databasingComments;
-    this.creationDate = format(partialEntity.creationDate, 'yyyy/MM/dd');
-    this.modificationDate = format(
-      partialEntity.modificationDate,
-      'yyyy/MM/dd'
-    );
+    this.creationDate = new Date(partialEntity.creationDate);
+    this.modificationDate = new Date(partialEntity.modificationDate);
     this.userCreation = partialEntity.userCreation;
     this.userModification = partialEntity.userModification;
     this.featureType = partialEntity.featureType;

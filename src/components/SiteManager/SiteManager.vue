@@ -34,130 +34,329 @@
       class="bg-secondary"
     >
       <q-form>
-        <!-- Alternative name -->
-        <q-input
-          v-model="site!.alternativeName"
-          class="form-element"
-          outlined
-          square
-          color="accent"
-          :label="SITE_TYPE_REFS_PARAMS.alternativeName"
-          stack-label
-          dense
-          :readonly="editionMode ? false : true"
-        />
+        <fieldset style="margin-top: 0px">
+          <legend>Names</legend>
+          <!-- Alternative name -->
+          <q-input
+            v-model="site.alternativeName"
+            class="form-element"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.alternativeName"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+          />
 
-        <!-- French name -->
-        <q-input
-          v-model="site!.frenchName"
-          class="form-element"
-          outlined
-          square
-          color="accent"
-          :label="SITE_TYPE_REFS_PARAMS.frenchName"
-          stack-label
-          dense
-          :readonly="editionMode ? false : true"
-        />
+          <!-- French name -->
+          <q-input
+            v-model="site.frenchName"
+            class="form-element"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.frenchName"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+          />
 
-        <!-- Khmer name -->
-        <q-input
-          v-model="site!.khmerName"
-          class="form-element"
-          outlined
-          square
-          color="accent"
-          :label="SITE_TYPE_REFS_PARAMS.khmerName"
-          stack-label
-          dense
-          :readonly="editionMode ? false : true"
-        />
+          <!-- Khmer name -->
+          <q-input
+            v-model="site.khmerName"
+            class="form-element"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.khmerName"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+          />
 
-        <!-- alternative khmer name -->
-        <q-input
-          v-model="site!.alternativeKhmerName"
-          class="form-element"
-          outlined
-          square
-          color="accent"
-          :label="SITE_TYPE_REFS_PARAMS.alternativeKhmerName"
-          stack-label
-          dense
-          :readonly="editionMode ? false : true"
-        />
-        <q-separator class="form-separator"></q-separator>
+          <!-- alternative khmer name -->
+          <q-input
+            v-model="site.alternativeKhmerName"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.alternativeKhmerName"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+          />
+        </fieldset>
 
-        <!-- description -->
-        <q-input
-          v-model="site!.description"
-          class="form-element"
-          outlined
-          square
-          color="accent"
-          :label="SITE_TYPE_REFS_PARAMS.description"
-          stack-label
-          dense
-          :readonly="editionMode ? false : true"
-        />
+        <fieldset>
+          <legend>Informations</legend>
+          <!-- description -->
+          <q-input
+            v-model="site.description"
+            class="form-element"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.description"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+          />
 
-        <!-- ikId -->
-        <q-input
-          v-model="site!.ikId"
-          class="form-element"
-          outlined
-          square
-          color="accent"
-          :label="SITE_TYPE_REFS_PARAMS.ikId"
-          stack-label
-          dense
-          :readonly="editionMode ? false : true"
-        />
+          <!-- Implémenter les options -->
+          <q-select
+            v-model="site.featureType"
+            class="form-element"
+            :options="['Temple', 'Mound']"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.featureType"
+            dense
+            :readonly="editionMode ? false : true"
+          />
 
-        <!-- mhId -->
-        <q-input
-          v-model="site!.mhId"
-          class="form-element"
-          outlined
-          square
-          color="accent"
-          :label="SITE_TYPE_REFS_PARAMS.mhId"
-          stack-label
-          dense
-          :readonly="editionMode ? false : true"
-        />
+          <q-select
+            v-model="site.studyArea"
+            class="form-element"
+            :options="['Angkor', 'Phnom Penh']"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.studyArea"
+            dense
+            :readonly="editionMode ? false : true"
+          />
 
-        <!-- Verified TODO: A IMPLEMENTER-->
+          <!-- ikId -->
+          <q-input
+            v-model="site.ikId"
+            class="form-element"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.ikId"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+          />
 
-        <!-- Verification date -->
-        <q-input
-          v-model="site!.verificationDate"
-          class="form-element"
-          outlined
-          square
-          color="accent"
-          :label="SITE_TYPE_REFS_PARAMS.verificationDate"
-          stack-label
-          dense
-          :readonly="editionMode ? false : true"
-          mask="date"
-          :rules="['date']"
-        >
-          <template #append>
-            <q-icon v-if="editionMode" name="event" class="cursor-pointer">
-              <q-popup-proxy
-                cover
-                transition-show="scale"
-                transition-hide="scale"
-              >
-                <q-date v-model="site!.verificationDate">
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="primary" flat />
-                  </div>
-                </q-date>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
+          <!-- mhId -->
+          <q-input
+            v-model="site.mhId"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.mhId"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+          />
+        </fieldset>
+
+        <fieldset>
+          <legend>Verification</legend>
+
+          <!-- verified -->
+          <q-checkbox
+            v-model="site.verified"
+            :label="SITE_TYPE_REFS_PARAMS.verified"
+            :disable="editionMode ? false : true"
+          />
+
+          <!-- Verification date -->
+          <q-input
+            v-model="verificationDate"
+            style="padding-bottom: 0px"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.verificationDate"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+            mask="date"
+            :rules="['date']"
+          >
+            <template #append>
+              <q-icon v-if="editionMode" name="event" class="cursor-pointer">
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date v-model="verificationDate">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+        </fieldset>
+
+        <fieldset>
+          <legend>Ceramics</legend>
+
+          <!-- Ceramics -->
+          <q-checkbox
+            v-model="site.ceramics"
+            :label="SITE_TYPE_REFS_PARAMS.ceramics"
+            :disable="editionMode ? false : true"
+          />
+
+          <!-- Ceramic details-->
+          <q-input
+            v-model="site.ceramicsDetails"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.ceramicsDetails"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+            autogrow
+          />
+        </fieldset>
+
+        <fieldset>
+          <legend>Build Materials</legend>
+        </fieldset>
+
+        <fieldset>
+          <legend>State</legend>
+          <div class="row">
+            <q-checkbox
+              v-model="site.looted"
+              class="col"
+              :label="SITE_TYPE_REFS_PARAMS.looted"
+              :disable="editionMode ? false : true"
+            />
+
+            <q-checkbox
+              v-model="site.cleared"
+              class="col"
+              :label="SITE_TYPE_REFS_PARAMS.cleared"
+              :disable="editionMode ? false : true"
+            />
+          </div>
+          <div class="row">
+            <q-checkbox
+              v-model="site.cultivated"
+              class="col"
+              :label="SITE_TYPE_REFS_PARAMS.cultivated"
+              :disable="editionMode ? false : true"
+            />
+            <q-checkbox
+              v-model="site.threatened"
+              class="col"
+              :label="SITE_TYPE_REFS_PARAMS.threatened"
+              :disable="editionMode ? false : true"
+            />
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Database information</legend>
+
+          <q-input
+            v-model="site.databasingComments"
+            class="form-element"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.databasingComments"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+            autogrow
+          />
+
+          <q-input
+            v-model="creationDate"
+            style="padding-bottom: 10px"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.creationDate"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+            mask="date"
+            :rules="['date']"
+          >
+            <template #append>
+              <q-icon v-if="editionMode" name="event" class="cursor-pointer">
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date v-model="creationDate">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+
+          <q-input
+            v-model="modificationDate"
+            style="padding-bottom: 10px"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.modificationDate"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+            mask="date"
+            :rules="['date']"
+          >
+            <template #append>
+              <q-icon v-if="editionMode" name="event" class="cursor-pointer">
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date v-model="modificationDate">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+
+          <q-input
+            v-model="site.userCreation"
+            class="form-element"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.userCreation"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+          />
+
+          <q-input
+            v-model="site.userModification"
+            class="form-element"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.userModification"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+          />
+        </fieldset>
       </q-form>
 
       <!-- Action buttons -->
@@ -201,108 +400,22 @@
 
 <script setup lang="ts">
 import { useSiteStore } from '../../stores/site-store';
-import { date } from 'quasar';
-import {
-  ISiteTypeRefParams,
-  SITE_TYPE_REFS_PARAMS,
-} from '../../utils/params/typeRefsSettings';
-import { onMounted, ref, Ref } from 'vue';
+import { SITE_TYPE_REFS_PARAMS } from '../../utils/params/typeRefsSettings';
+import { ref } from 'vue';
 import ConfirmDialog from './ConfirmDialog.vue';
-import { IResearcher } from 'src/interface/IResearcher';
-import { IDocument } from 'src/interface/IDocument';
-import { IBuildMaterial } from 'src/interface/IBuildMaterial';
-import { IArtefact } from 'src/interface/IArtefact';
+import { format } from 'date-fns';
 
-export interface ISiteInfo {
-  key: string;
-  formattedKey:
-    | string
-    | IResearcher
-    | IResearcher[]
-    | IDocument[]
-    | IArtefact[]
-    | IBuildMaterial[];
-  value: string;
-  type: string;
-}
 const siteStore = useSiteStore();
-const site = ref(siteStore.site);
-const siteInformationList: Ref<ISiteInfo[]> = ref([]);
+const site = ref(siteStore.site!);
 const editionMode = ref(false);
 const confirmDialogVisibility = ref(false);
 const expended = ref(false);
+const verificationDate = ref(dateToQuasarDate(site.value.verificationDate));
+const creationDate = ref(dateToQuasarDate(site.value.creationDate));
+const modificationDate = ref(dateToQuasarDate(site.value.modificationDate));
 
-// onMounted(() => {
-//   initializeSiteInformation();
-// });
-
-/**
- * Initialize site information object. This object is used to dynamically create the form
- */
-// function initializeSiteInformation(): void {
-//   Object.entries(SITE_TYPE_REFS_PARAMS).forEach(([key, value]) => {
-//     if (site.value) {
-//       const valueType = getTypeOfValue(site[key as ISiteTypeRefParams]);
-//       const siteObject: ISiteInfo = {
-//         key: key,
-//         formattedKey: valueFormatter(site[key as ISiteTypeRefParams]),
-//         value: value,
-//         type: valueType,
-//       };
-//       siteInformationList.value.push(siteObject);
-//     }
-//   });
-// }
-
-//TODO: Améliorer le formulaire pour se passer de cette fonction inélégante
-
-/**
- * Format value to display them in the form
- * @param inputValue Value to format
- */
-function valueFormatter(
-  inputValue:
-    | string
-    | Date
-    | number
-    | boolean
-    | IResearcher
-    | IResearcher[]
-    | IDocument[]
-    | IArtefact[]
-    | IBuildMaterial[]
-):
-  | string
-  | IResearcher
-  | IResearcher[]
-  | IDocument[]
-  | IArtefact[]
-  | IBuildMaterial[] {
-  if (inputValue instanceof Date) {
-    return formatDate(inputValue);
-  } else if (typeof inputValue === 'number') {
-    return inputValue.toString();
-  } else if (typeof inputValue === 'boolean') {
-    return inputValue ? 'Yes' : 'No';
-  }
-
-  return inputValue;
-}
-
-/**
- * Format data to remove excessive time information
- * @param inputDate Data
- */
-function formatDate(inputDate: Date): string {
-  return date.formatDate(inputDate, 'YYYY-MM-DD');
-}
-
-/**
- * Return the type of the object
- * @param inputValue Value to check
- */
-function getTypeOfValue(inputValue: unknown): string {
-  return inputValue instanceof Date ? 'date' : typeof inputValue;
+function dateToQuasarDate(date: Date): string {
+  return format(date, 'yyyy/MM/dd');
 }
 
 /**
@@ -317,8 +430,26 @@ function confirmDialogManager(visibility: boolean, edition: boolean): void {
 </script>
 
 <style lang="scss">
-.form-separator {
-  margin: 20px;
+fieldset {
+  border: 1px solid $primary;
+  border-radius: 2px;
+  margin-top: 20px;
+}
+
+legend {
+  font-size: 15px;
+  padding: 0 10px;
+  color: $primary;
+}
+
+.form-group {
+  border: 1px solid black;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.form-element {
+  margin-bottom: 10px;
 }
 
 .header {
@@ -326,11 +457,6 @@ function confirmDialogManager(visibility: boolean, edition: boolean): void {
   top: 0px;
   z-index: 1;
   padding: 30px;
-}
-
-.form-element {
-  margin-bottom: 5px;
-  margin-top: 5px;
 }
 
 .site-button {
