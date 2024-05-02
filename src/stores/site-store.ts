@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { Site } from 'src/model/site';
 import { useComponentStore } from './component-store';
 import ApiRequestor from 'src/services/ApiRequestor';
+import { nextTick } from 'vue';
 
 const componentStore = useComponentStore();
 
@@ -28,9 +29,9 @@ export const useSiteStore = defineStore('sites', {
         this._site = site;
         if (componentStore.widget.visibility) {
           componentStore.setWidget(false, '');
-          setTimeout(() => {
+          nextTick(() => {
             componentStore.setWidget(true, 'site-manager');
-          }, 10);
+          });
         } else {
           componentStore.setWidget(true, 'site-manager');
         }
@@ -49,6 +50,9 @@ export const useSiteStore = defineStore('sites', {
       }
     },
 
+    /**
+     * Clear site in store and close widget
+     */
     clearSite(): void {
       this._site = undefined;
       componentStore.setWidget(false, '');

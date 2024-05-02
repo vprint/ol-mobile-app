@@ -15,10 +15,11 @@
     appear
     :enter-active-class="enterAnimation"
     :leave-active-class="exitAnimation"
-  >
-    <SiteManager
-      v-if="widget.visibility && widget.widgetName === 'site-manager'"
-    ></SiteManager>
+    ><Suspense>
+      <SiteManager
+        v-if="widget.visibility && widget.widgetName === 'site-manager'"
+      ></SiteManager
+    ></Suspense>
   </transition>
 </template>
 
@@ -69,6 +70,13 @@ watch(
   .global-card {
     width: 100%;
     height: 50%;
+    left: 0px;
+    bottom: -2px;
+  }
+
+  .global-card-expended {
+    width: 100%;
+    height: 100%;
     left: 0px;
     bottom: -2px;
   }

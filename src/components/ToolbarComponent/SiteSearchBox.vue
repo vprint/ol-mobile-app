@@ -2,6 +2,7 @@
   <!-- Searchbox -->
   <q-select
     v-if="isReady"
+    ref="siteSearch"
     v-model="model"
     hide-selected
     use-input
@@ -27,14 +28,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, Ref, watch } from 'vue';
+import { nextTick, onMounted, ref, Ref, watch } from 'vue';
 import ApiRequestor from '../../services/ApiRequestor';
 import { useSiteStore } from 'src/stores/site-store';
-
-export interface ISiteList {
-  site_id: number;
-  site_name: string;
-}
+import { QSelect } from 'quasar';
 
 interface ISearchItems {
   label: string;
@@ -46,6 +43,7 @@ const siteStore = useSiteStore();
 const options: Ref<ISearchItems[]> = ref([]);
 const model: Ref<string | null> = ref(null);
 const isReady = ref(false);
+const siteSearch: Ref<null | QSelect> = ref(null);
 
 /**
  * Listen for site change
@@ -63,19 +61,17 @@ watch(
 onMounted(async () => {
   const result = await ApiRequestor.getSiteList();
 
-  if (result) {
-    options.value = result.map((site) => ({
-      label: site.site_name,
-      value: site.site_id,
-    }));
+  options.value = result.map((site) => ({
+    label: site.site_name,
+    value: site.site_id,
+  }));
 
-    searchList = result.map((site) => ({
-      label: site.site_name,
-      value: site.site_id,
-    }));
+  searchList = result.map((site) => ({
+    label: site.site_name,
+    value: site.site_id,
+  }));
 
-    isReady.value = true;
-  }
+  isReady.value = true;
 });
 
 /**
@@ -98,6 +94,12 @@ function filterFn(val: string, update: (fn: () => void) => void): void {
  */
 function selectSite(site: ISearchItems | undefined): void {
   if (site) {
+    nextTick(() => {
+      if (siteSearch.value) {
+        siteSearch.value.blur();
+      }
+    });
+
     siteStore.fetchAndSetSite(site.value);
   }
 }
