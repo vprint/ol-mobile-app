@@ -61,19 +61,17 @@ watch(
 onMounted(async () => {
   const result = await ApiRequestor.getSiteList();
 
-  if (result) {
-    options.value = result.map((site) => ({
-      label: site.site_name,
-      value: site.site_id,
-    }));
+  options.value = result.map((site) => ({
+    label: site.site_name,
+    value: site.site_id,
+  }));
 
-    searchList = result.map((site) => ({
-      label: site.site_name,
-      value: site.site_id,
-    }));
+  searchList = result.map((site) => ({
+    label: site.site_name,
+    value: site.site_id,
+  }));
 
-    isReady.value = true;
-  }
+  isReady.value = true;
 });
 
 /**
