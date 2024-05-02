@@ -8,13 +8,15 @@ export enum SITE_TYPE_REFS_PARAMS {
   description = 'Description',
   ikId = 'IK ID',
   mhId = 'MH ID',
+  researchers = 'Researchers',
   verified = 'Verified',
   verificationDate = 'Verification date',
   locatedBy = 'Located by',
   ceramicsDetails = 'Ceramics details',
   ceramics = 'Ceramics',
+  buildMaterials = 'Build materials',
   buildMaterialComments = 'Build material comments',
-  artefactsComments = 'Artefacts comments',
+  artefactComments = 'Artefacts comments',
   looted = 'Looted',
   cultivated = 'Cultivated',
   cleared = 'Cleared',
@@ -26,6 +28,7 @@ export enum SITE_TYPE_REFS_PARAMS {
   userModification = 'Modified by',
   featureType = 'Feature type',
   studyArea = 'Study area',
+  artefacts = 'Artefacts',
 }
 
 export type ISiteTypeRefParams = keyof typeof SITE_TYPE_REFS_PARAMS;

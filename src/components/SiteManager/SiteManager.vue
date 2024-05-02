@@ -28,11 +28,7 @@
     </q-bar>
 
     <!-- Content -->
-    <q-card-section
-      v-if="siteStore.site"
-      id="site-manager"
-      class="bg-secondary"
-    >
+    <q-card-section id="site-manager" class="bg-secondary">
       <q-form>
         <fieldset style="margin-top: 0px">
           <legend>Names</legend>
@@ -103,7 +99,7 @@
             :readonly="editionMode ? false : true"
           />
 
-          <!-- Implémenter les options -->
+          <!-- TODO: Implémenter les options -->
           <q-select
             v-model="site.featureType"
             class="form-element"
@@ -114,8 +110,10 @@
             :label="SITE_TYPE_REFS_PARAMS.featureType"
             dense
             :readonly="editionMode ? false : true"
+            :hide-dropdown-icon="!editionMode"
           />
 
+          <!-- Study area -->
           <q-select
             v-model="site.studyArea"
             class="form-element"
@@ -126,6 +124,7 @@
             :label="SITE_TYPE_REFS_PARAMS.studyArea"
             dense
             :readonly="editionMode ? false : true"
+            :hide-dropdown-icon="!editionMode"
           />
 
           <!-- ikId -->
@@ -144,6 +143,7 @@
           <!-- mhId -->
           <q-input
             v-model="site.mhId"
+            class="form-element"
             outlined
             square
             color="accent"
@@ -151,6 +151,58 @@
             stack-label
             dense
             :readonly="editionMode ? false : true"
+          />
+
+          <!-- Researchers -->
+          <q-select
+            v-model="site.researchers"
+            class="form-element"
+            :options="researchers"
+            option-value="researcherId"
+            option-label="fullName"
+            multiple
+            outlined
+            square
+            color="primary"
+            :label="SITE_TYPE_REFS_PARAMS.researchers"
+            dense
+            emit-value
+            map-options
+            use-chips
+            stack-label
+            :readonly="!editionMode"
+            :hide-dropdown-icon="!editionMode"
+          >
+            <template #selected-item="scope">
+              <q-chip
+                square
+                dense
+                :removable="editionMode"
+                :tabindex="scope.tabindex"
+                class="q-ma-xs"
+                @remove="scope.removeAtIndex(scope.index)"
+              >
+                {{ scope.opt.fullName }}
+              </q-chip>
+            </template>
+          </q-select>
+
+          <!-- Located by -->
+          <q-select
+            v-model="site.locatedBy.fullName"
+            class="form-element"
+            :options="researchers"
+            option-value="researcherId"
+            option-label="fullName"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.locatedBy"
+            dense
+            emit-value
+            map-options
+            :readonly="editionMode ? false : true"
+            :hide-dropdown-icon="!editionMode"
           />
         </fieldset>
 
@@ -166,7 +218,7 @@
 
           <!-- Verification date -->
           <q-input
-            v-model="verificationDate"
+            v-model="site.verificationDate"
             style="padding-bottom: 0px"
             outlined
             square
@@ -185,7 +237,7 @@
                   transition-show="scale"
                   transition-hide="scale"
                 >
-                  <q-date v-model="verificationDate">
+                  <q-date v-model="site.verificationDate">
                     <div class="row items-center justify-end">
                       <q-btn v-close-popup label="Close" color="primary" flat />
                     </div>
@@ -221,12 +273,109 @@
         </fieldset>
 
         <fieldset>
+          <legend>Artefacts</legend>
+          <!-- Artefacts -->
+          <q-select
+            v-model="site.artefacts"
+            class="form-element"
+            :options="artefacts"
+            option-value="artefactId"
+            option-label="artefactName"
+            multiple
+            outlined
+            square
+            color="primary"
+            :label="SITE_TYPE_REFS_PARAMS.artefacts"
+            dense
+            emit-value
+            map-options
+            use-chips
+            stack-label
+            :readonly="!editionMode"
+            :hide-dropdown-icon="!editionMode"
+          >
+            <template #selected-item="scope">
+              <q-chip
+                square
+                dense
+                :removable="editionMode"
+                :tabindex="scope.tabindex"
+                class="q-ma-xs"
+                @remove="scope.removeAtIndex(scope.index)"
+              >
+                {{ scope.opt.artefactName }}
+              </q-chip>
+            </template>
+          </q-select>
+
+          <!-- artefact comment -->
+          <q-input
+            v-model="site.artefactsComments"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.artefactComments"
+            stack-label
+            dense
+            :readonly="!editionMode"
+            autogrow
+          />
+        </fieldset>
+
+        <fieldset>
           <legend>Build Materials</legend>
+
+          <!-- build materials-->
+          <q-select
+            v-model="site.buildMaterials"
+            class="form-element"
+            dense
+            outlined
+            square
+            color="primary"
+            option-value="buildMaterialId"
+            option-label="buildMaterialName"
+            multiple
+            :options="buildMaterials"
+            use-chips
+            stack-label
+            :label="SITE_TYPE_REFS_PARAMS.buildMaterials"
+            :readonly="!editionMode"
+            :hide-dropdown-icon="!editionMode"
+          >
+            <template #selected-item="scope">
+              <q-chip
+                square
+                dense
+                :removable="editionMode"
+                :tabindex="scope.tabindex"
+                class="q-ma-xs"
+                @remove="scope.removeAtIndex(scope.index)"
+              >
+                {{ scope.opt.buildMaterialName }}
+              </q-chip>
+            </template>
+          </q-select>
+
+          <!-- build material details-->
+          <q-input
+            v-model="site.buildMaterialComments"
+            outlined
+            square
+            color="accent"
+            :label="SITE_TYPE_REFS_PARAMS.buildMaterialComments"
+            stack-label
+            dense
+            :readonly="editionMode ? false : true"
+            autogrow
+          />
         </fieldset>
 
         <fieldset>
           <legend>State</legend>
+
           <div class="row">
+            <!-- Looted -->
             <q-checkbox
               v-model="site.looted"
               class="col"
@@ -234,6 +383,7 @@
               :disable="editionMode ? false : true"
             />
 
+            <!-- Cleared -->
             <q-checkbox
               v-model="site.cleared"
               class="col"
@@ -241,13 +391,16 @@
               :disable="editionMode ? false : true"
             />
           </div>
+
           <div class="row">
+            <!-- cultivated -->
             <q-checkbox
               v-model="site.cultivated"
               class="col"
               :label="SITE_TYPE_REFS_PARAMS.cultivated"
               :disable="editionMode ? false : true"
             />
+            <!-- threatened -->
             <q-checkbox
               v-model="site.threatened"
               class="col"
@@ -259,7 +412,7 @@
 
         <fieldset>
           <legend>Database information</legend>
-
+          <!-- databasing comments -->
           <q-input
             v-model="site.databasingComments"
             class="form-element"
@@ -273,8 +426,9 @@
             autogrow
           />
 
+          <!-- Creation date -->
           <q-input
-            v-model="creationDate"
+            v-model="site.creationDate"
             style="padding-bottom: 10px"
             outlined
             square
@@ -293,7 +447,7 @@
                   transition-show="scale"
                   transition-hide="scale"
                 >
-                  <q-date v-model="creationDate">
+                  <q-date v-model="site.creationDate">
                     <div class="row items-center justify-end">
                       <q-btn v-close-popup label="Close" color="primary" flat />
                     </div>
@@ -303,8 +457,9 @@
             </template>
           </q-input>
 
+          <!-- Modificiation date-->
           <q-input
-            v-model="modificationDate"
+            v-model="site.modificationDate"
             style="padding-bottom: 10px"
             outlined
             square
@@ -323,7 +478,7 @@
                   transition-show="scale"
                   transition-hide="scale"
                 >
-                  <q-date v-model="modificationDate">
+                  <q-date v-model="site.modificationDate">
                     <div class="row items-center justify-end">
                       <q-btn v-close-popup label="Close" color="primary" flat />
                     </div>
@@ -333,6 +488,7 @@
             </template>
           </q-input>
 
+          <!-- user creation -->
           <q-input
             v-model="site.userCreation"
             class="form-element"
@@ -345,6 +501,7 @@
             :readonly="editionMode ? false : true"
           />
 
+          <!-- user modification -->
           <q-input
             v-model="site.userModification"
             class="form-element"
@@ -403,20 +560,18 @@ import { useSiteStore } from '../../stores/site-store';
 import { SITE_TYPE_REFS_PARAMS } from '../../utils/params/typeRefsSettings';
 import { ref } from 'vue';
 import ConfirmDialog from './ConfirmDialog.vue';
-import { format } from 'date-fns';
+import ApiRequestor from '../../services/ApiRequestor';
 
 const siteStore = useSiteStore();
 const site = ref(siteStore.site!);
 const editionMode = ref(false);
 const confirmDialogVisibility = ref(false);
 const expended = ref(false);
-const verificationDate = ref(dateToQuasarDate(site.value.verificationDate));
-const creationDate = ref(dateToQuasarDate(site.value.creationDate));
-const modificationDate = ref(dateToQuasarDate(site.value.modificationDate));
 
-function dateToQuasarDate(date: Date): string {
-  return format(date, 'yyyy/MM/dd');
-}
+const researchers = await ApiRequestor.getResearcherList();
+const buildMaterials = await ApiRequestor.getBuildMaterialList();
+const documents = await ApiRequestor.getDocumentList();
+const artefacts = await ApiRequestor.getArtefactList();
 
 /**
  * Manage dialog event

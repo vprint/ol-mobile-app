@@ -15,10 +15,11 @@
     appear
     :enter-active-class="enterAnimation"
     :leave-active-class="exitAnimation"
-  >
-    <SiteManager
-      v-if="widget.visibility && widget.widgetName === 'site-manager'"
-    ></SiteManager>
+    ><Suspense>
+      <SiteManager
+        v-if="widget.visibility && widget.widgetName === 'site-manager'"
+      ></SiteManager
+    ></Suspense>
   </transition>
 </template>
 

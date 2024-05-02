@@ -1,6 +1,10 @@
+import { format } from 'date-fns';
 import { Geometry } from 'ol/geom';
-import { IResearcher } from 'src/interface/IResearcher';
 import { ISite } from 'src/interface/ISite';
+import { Researcher } from './researcher';
+import { BuildMaterial } from './buildMaterial';
+import { Artefact } from './artefact';
+import { AssociatedDocument } from './associatedDocument';
 
 /**
  * Site
@@ -16,10 +20,13 @@ export class Site {
   public ikId: number;
   public mhId: number;
   public verified: boolean;
-  public verificationDate: Date;
-  public locatedBy: IResearcher;
+  public researchers: Researcher[];
+  public artefacts: Artefact[];
+  public verificationDate: string;
+  public locatedBy: Researcher;
   public ceramicsDetails: string;
   public ceramics: boolean;
+  public buildMaterials: BuildMaterial[];
   public buildMaterialComments: string;
   public artefactsComments: string;
   public looted: boolean;
@@ -27,12 +34,13 @@ export class Site {
   public cleared: boolean;
   public threatened: boolean;
   public databasingComments: string;
-  public creationDate: Date;
-  public modificationDate: Date;
+  public creationDate: string;
+  public modificationDate: string;
   public userCreation: string;
   public userModification: string;
   public featureType: string;
   public studyArea: string;
+  public documents: AssociatedDocument[];
   public geom?: Geometry;
 
   constructor(partialEntity: ISite) {
@@ -46,10 +54,16 @@ export class Site {
     this.ikId = Number(partialEntity.ikId);
     this.mhId = Number(partialEntity.mhId);
     this.verified = Boolean(partialEntity.verified);
-    this.verificationDate = new Date(partialEntity.verificationDate);
-    this.locatedBy = partialEntity.locatedBy;
+    this.verificationDate = format(
+      partialEntity.verificationDate,
+      'yyyy/MM/dd'
+    );
+    this.locatedBy = new Researcher(partialEntity.locatedBy);
     this.ceramicsDetails = partialEntity.ceramicsDetails;
     this.ceramics = Boolean(partialEntity.ceramics);
+    this.buildMaterials = partialEntity.buildMaterials.map(
+      (buildMaterial) => new BuildMaterial(buildMaterial)
+    );
     this.buildMaterialComments = partialEntity.buildMaterialComments;
     this.artefactsComments = partialEntity.artefactsComments;
     this.looted = Boolean(partialEntity.looted);
@@ -57,12 +71,24 @@ export class Site {
     this.cleared = Boolean(partialEntity.cleared);
     this.threatened = Boolean(partialEntity.threatened);
     this.databasingComments = partialEntity.databasingComments;
-    this.creationDate = new Date(partialEntity.creationDate);
-    this.modificationDate = new Date(partialEntity.modificationDate);
+    this.creationDate = format(partialEntity.creationDate, 'yyyy/MM/dd');
+    this.modificationDate = format(
+      partialEntity.modificationDate,
+      'yyyy/MM/dd'
+    );
     this.userCreation = partialEntity.userCreation;
     this.userModification = partialEntity.userModification;
     this.featureType = partialEntity.featureType;
     this.studyArea = partialEntity.studyArea;
+    this.researchers = partialEntity.researchers.map(
+      (researcher) => new Researcher(researcher)
+    );
+    this.artefacts = partialEntity.artefacts.map(
+      (artefact) => new Artefact(artefact)
+    );
+    this.documents = partialEntity.documents.map(
+      (document) => new AssociatedDocument(document)
+    );
   }
 
   get siteId(): number {

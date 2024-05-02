@@ -19,6 +19,7 @@ export interface ISite {
   ceramicsDetails: string;
   ceramics: boolean;
   buildMaterialComments: string;
+  buildMaterials: IBuildMaterial[];
   artefactsComments: string;
   looted: boolean;
   cultivated: boolean;
@@ -32,7 +33,6 @@ export interface ISite {
   studyArea: string;
   featureType: string;
   documents: IDocument[];
-  buildMaterials: IBuildMaterial[];
   artefacts: IArtefact[];
   researchers: IResearcher[];
 }
