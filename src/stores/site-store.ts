@@ -39,6 +39,14 @@ export const useSiteStore = defineStore('sites', {
     },
 
     /**
+     * Update site values
+     * @param site New site
+     */
+    updateSite(site: Site): void {
+      this._site = site;
+    },
+
+    /**
      * Fetch site and assign it in the store
      * @param siteId site id
      */
