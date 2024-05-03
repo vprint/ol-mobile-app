@@ -8,10 +8,11 @@
     color="accent"
     stack-label
     dense
-    class="form-input-element"
+    :class="noPadding ? undefined : 'form-input-element'"
     :mask="date ? 'date' : undefined"
     :rules="date ? ['date'] : undefined"
     :label="label"
+    hide-bottom-space
   >
     <template #append>
       <q-icon v-if="editionMode && date" name="event" class="cursor-pointer">
@@ -35,10 +36,12 @@ const props = withDefaults(
     editionMode: boolean;
     date?: boolean;
     autogrow?: boolean;
+    noPadding?: boolean;
   }>(),
   {
     date: false,
     autogrow: false,
+    noPadding: false,
   }
 );
 
@@ -48,5 +51,17 @@ const model = defineModel<string | number>();
 <style lang="scss">
 .form-input-element {
   margin-bottom: 10px;
+}
+
+.q-field {
+  &.q-field--readonly {
+    &.q-field--outlined {
+      .q-field__control {
+        &:before {
+          border: transparent;
+        }
+      }
+    }
+  }
 }
 </style>

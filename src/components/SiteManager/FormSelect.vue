@@ -9,7 +9,7 @@
     :option-label="optionLabel"
     :multiple="multiple"
     :use-chips="multiple"
-    class="form-select-element"
+    :class="noPadding ? undefined : 'form-select-element'"
     outlined
     square
     dense
@@ -42,11 +42,13 @@ const props = withDefaults(
     optionLabel?: string | undefined;
     editionMode: boolean;
     multiple?: boolean;
+    noPadding?: boolean;
   }>(),
   {
     optionValue: undefined,
     optionLabel: undefined,
     multiple: false,
+    noPadding: false,
   }
 );
 
@@ -77,5 +79,17 @@ const computedModel = computed({
 <style lang="scss">
 .form-select-element {
   margin-bottom: 10px;
+}
+
+.q-field {
+  &.q-field--readonly {
+    &.q-field--outlined {
+      .q-field__control {
+        &:before {
+          border: transparent;
+        }
+      }
+    }
+  }
 }
 </style>
