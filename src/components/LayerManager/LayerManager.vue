@@ -1,12 +1,23 @@
 <template>
-  <q-card square class="global-card">
+  <q-card square :class="expended ? 'global-card-expended' : 'global-card'">
     <!-- Title -->
-    <q-card-section
-      square
-      class="bg-accent text-white row items-center no-wrap header-card"
+    <q-bar
+      class="bg-accent text-white row items-center no-wrap header-card header"
     >
       <div>Manage layers</div>
+
       <q-space />
+
+      <q-btn
+        v-if="$q.platform.is.mobile"
+        v-close-popup
+        flat
+        round
+        :icon="expended ? 'expand_more' : 'expand_less'"
+        @click="expended = !expended"
+      />
+
+      <!-- Close button -->
       <q-btn
         v-close-popup
         flat
@@ -14,7 +25,8 @@
         icon="close"
         @click="componentStore.setWidget(false, '')"
       />
-    </q-card-section>
+    </q-bar>
+
     <!-- Content -->
     <q-card-section id="layer-manager" class="bg-secondary"> </q-card-section>
   </q-card>
@@ -24,10 +36,11 @@
 import { useComponentStore } from 'src/stores/component-store';
 import { useMapStore } from 'src/stores/map-store';
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const componentStore = useComponentStore();
 const mapStore = useMapStore();
+const expended = ref(false);
 
 // Initialize ol-ext LayerSwitcher
 onMounted(() => {
@@ -42,6 +55,13 @@ onMounted(() => {
 <style lang="scss">
 @import 'ol-ext/dist/ol-ext.css';
 @import 'font-awesome/css/font-awesome.min.css';
+
+.header {
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+  padding: 30px;
+}
 
 .ol-layerswitcher.ol-collapsed {
   min-width: unset;
