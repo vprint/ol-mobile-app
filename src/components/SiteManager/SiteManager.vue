@@ -32,177 +32,94 @@
       <q-form>
         <fieldset style="margin-top: 0px">
           <legend>Names</legend>
+
           <!-- Alternative name -->
-          <q-input
+          <FormInput
             v-model="site.alternativeName"
-            class="form-element"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.alternativeName"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
           />
 
           <!-- French name -->
-          <q-input
+          <FormInput
             v-model="site.frenchName"
-            class="form-element"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.frenchName"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
           />
 
           <!-- Khmer name -->
-          <q-input
+          <FormInput
             v-model="site.khmerName"
-            class="form-element"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.khmerName"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
           />
 
           <!-- alternative khmer name -->
-          <q-input
+          <FormInput
             v-model="site.alternativeKhmerName"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.alternativeKhmerName"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
           />
         </fieldset>
 
         <fieldset>
           <legend>Informations</legend>
           <!-- description -->
-          <q-input
+          <FormInput
             v-model="site.description"
-            class="form-element"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.description"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
           />
 
-          <!-- TODO: Implémenter les options -->
-          <q-select
+          <!-- Feature type -->
+          <FormSelect
             v-model="site.featureType"
-            class="form-element"
-            :options="['Temple', 'Mound']"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.featureType"
-            dense
-            :readonly="editionMode ? false : true"
-            :hide-dropdown-icon="!editionMode"
+            :options="['Temple', 'Mound']"
+            :edition-mode="editionMode"
           />
 
           <!-- Study area -->
-          <q-select
+          <FormSelect
             v-model="site.studyArea"
-            class="form-element"
-            :options="['Angkor', 'Phnom Penh']"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.studyArea"
-            dense
-            :readonly="editionMode ? false : true"
-            :hide-dropdown-icon="!editionMode"
+            :options="['Angkor', 'Phnom Penh']"
+            :edition-mode="editionMode"
           />
 
           <!-- ikId -->
-          <q-input
+          <FormInput
             v-model="site.ikId"
-            class="form-element"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.ikId"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
           />
 
           <!-- mhId -->
-          <q-input
+          <FormInput
             v-model="site.mhId"
-            class="form-element"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.mhId"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
           />
 
           <!-- Researchers -->
-          <q-select
+          <FormSelect
             v-model="site.researchers"
-            class="form-element"
+            :label="SITE_TYPE_REFS_PARAMS.researchers"
             :options="researchers"
             option-value="researcherId"
             option-label="fullName"
+            :edition-mode="editionMode"
             multiple
-            outlined
-            square
-            color="primary"
-            :label="SITE_TYPE_REFS_PARAMS.researchers"
-            dense
-            emit-value
-            map-options
-            use-chips
-            stack-label
-            :readonly="!editionMode"
-            :hide-dropdown-icon="!editionMode"
-          >
-            <template #selected-item="scope">
-              <q-chip
-                square
-                dense
-                :removable="editionMode"
-                :tabindex="scope.tabindex"
-                class="q-ma-xs"
-                @remove="scope.removeAtIndex(scope.index)"
-              >
-                {{ scope.opt.fullName }}
-              </q-chip>
-            </template>
-          </q-select>
+          />
 
           <!-- Located by -->
-          <q-select
-            v-model="site.locatedBy.fullName"
-            class="form-element"
+          <FormSelect
+            v-model="site.locatedBy"
+            :label="SITE_TYPE_REFS_PARAMS.locatedBy"
             :options="researchers"
             option-value="researcherId"
             option-label="fullName"
-            outlined
-            square
-            color="accent"
-            :label="SITE_TYPE_REFS_PARAMS.locatedBy"
-            dense
-            emit-value
-            map-options
-            :readonly="editionMode ? false : true"
-            :hide-dropdown-icon="!editionMode"
+            :edition-mode="editionMode"
           />
         </fieldset>
 
@@ -217,35 +134,12 @@
           />
 
           <!-- Verification date -->
-          <q-input
+          <FormInput
             v-model="site.verificationDate"
-            style="padding-bottom: 0px"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.verificationDate"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
-            mask="date"
-            :rules="['date']"
-          >
-            <template #append>
-              <q-icon v-if="editionMode" name="event" class="cursor-pointer">
-                <q-popup-proxy
-                  cover
-                  transition-show="scale"
-                  transition-hide="scale"
-                >
-                  <q-date v-model="site.verificationDate">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
+            :edition-mode="editionMode"
+            date
+          />
         </fieldset>
 
         <fieldset>
@@ -259,65 +153,33 @@
           />
 
           <!-- Ceramic details-->
-          <q-input
+          <FormInput
             v-model="site.ceramicsDetails"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.ceramicsDetails"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
             autogrow
           />
         </fieldset>
 
         <fieldset>
           <legend>Artefacts</legend>
+
           <!-- Artefacts -->
-          <q-select
+          <FormSelect
             v-model="site.artefacts"
-            class="form-element"
+            :label="SITE_TYPE_REFS_PARAMS.artefacts"
             :options="artefacts"
             option-value="artefactId"
             option-label="artefactName"
+            :edition-mode="editionMode"
             multiple
-            outlined
-            square
-            color="primary"
-            :label="SITE_TYPE_REFS_PARAMS.artefacts"
-            dense
-            emit-value
-            map-options
-            use-chips
-            stack-label
-            :readonly="!editionMode"
-            :hide-dropdown-icon="!editionMode"
-          >
-            <template #selected-item="scope">
-              <q-chip
-                square
-                dense
-                :removable="editionMode"
-                :tabindex="scope.tabindex"
-                class="q-ma-xs"
-                @remove="scope.removeAtIndex(scope.index)"
-              >
-                {{ scope.opt.artefactName }}
-              </q-chip>
-            </template>
-          </q-select>
+          />
 
           <!-- artefact comment -->
-          <q-input
+          <FormInput
             v-model="site.artefactsComments"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.artefactComments"
-            stack-label
-            dense
-            :readonly="!editionMode"
+            :edition-mode="!editionMode"
             autogrow
           />
         </fieldset>
@@ -326,47 +188,21 @@
           <legend>Build Materials</legend>
 
           <!-- build materials-->
-          <q-select
+          <FormSelect
             v-model="site.buildMaterials"
-            class="form-element"
-            dense
-            outlined
-            square
-            color="primary"
+            :label="SITE_TYPE_REFS_PARAMS.buildMaterials"
+            :options="buildMaterials"
             option-value="buildMaterialId"
             option-label="buildMaterialName"
+            :edition-mode="editionMode"
             multiple
-            :options="buildMaterials"
-            use-chips
-            stack-label
-            :label="SITE_TYPE_REFS_PARAMS.buildMaterials"
-            :readonly="!editionMode"
-            :hide-dropdown-icon="!editionMode"
-          >
-            <template #selected-item="scope">
-              <q-chip
-                square
-                dense
-                :removable="editionMode"
-                :tabindex="scope.tabindex"
-                class="q-ma-xs"
-                @remove="scope.removeAtIndex(scope.index)"
-              >
-                {{ scope.opt.buildMaterialName }}
-              </q-chip>
-            </template>
-          </q-select>
+          />
 
           <!-- build material details-->
-          <q-input
+          <FormInput
             v-model="site.buildMaterialComments"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.buildMaterialComments"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
             autogrow
           />
         </fieldset>
@@ -413,105 +249,41 @@
         <fieldset>
           <legend>Database information</legend>
           <!-- databasing comments -->
-          <q-input
+          <FormInput
             v-model="site.databasingComments"
-            class="form-element"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.databasingComments"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
             autogrow
           />
 
           <!-- Creation date -->
-          <q-input
+          <FormInput
             v-model="site.creationDate"
-            style="padding-bottom: 10px"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.creationDate"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
-            mask="date"
-            :rules="['date']"
-          >
-            <template #append>
-              <q-icon v-if="editionMode" name="event" class="cursor-pointer">
-                <q-popup-proxy
-                  cover
-                  transition-show="scale"
-                  transition-hide="scale"
-                >
-                  <q-date v-model="site.creationDate">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
+            :edition-mode="editionMode"
+            date
+          />
 
           <!-- Modificiation date-->
-          <q-input
+          <FormInput
             v-model="site.modificationDate"
-            style="padding-bottom: 10px"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.modificationDate"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
-            mask="date"
-            :rules="['date']"
-          >
-            <template #append>
-              <q-icon v-if="editionMode" name="event" class="cursor-pointer">
-                <q-popup-proxy
-                  cover
-                  transition-show="scale"
-                  transition-hide="scale"
-                >
-                  <q-date v-model="site.modificationDate">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
+            :edition-mode="editionMode"
+            date
+          />
 
           <!-- user creation -->
-          <q-input
+          <FormInput
             v-model="site.userCreation"
-            class="form-element"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.userCreation"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
           />
 
           <!-- user modification -->
-          <q-input
+          <FormInput
             v-model="site.userModification"
-            class="form-element"
-            outlined
-            square
-            color="accent"
             :label="SITE_TYPE_REFS_PARAMS.userModification"
-            stack-label
-            dense
-            :readonly="editionMode ? false : true"
+            :edition-mode="editionMode"
           />
         </fieldset>
       </q-form>
@@ -561,6 +333,8 @@ import { SITE_TYPE_REFS_PARAMS } from '../../utils/params/typeRefsSettings';
 import { ref } from 'vue';
 import ConfirmDialog from './ConfirmDialog.vue';
 import ApiRequestor from '../../services/ApiRequestor';
+import FormSelect from './FormSelect.vue';
+import FormInput from './FormInput.vue';
 
 const siteStore = useSiteStore();
 const site = ref(siteStore.site!);
@@ -595,12 +369,6 @@ legend {
   font-size: 15px;
   padding: 0 10px;
   color: $primary;
-}
-
-.form-group {
-  border: 1px solid black;
-  margin-bottom: 5px;
-  margin-top: 5px;
 }
 
 .form-element {
