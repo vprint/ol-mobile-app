@@ -10,6 +10,8 @@ import { IDocument } from 'src/interface/IDocument';
 import { AssociatedDocument } from 'src/model/associatedDocument';
 import { IArtefact } from 'src/interface/IArtefact';
 import { Artefact } from 'src/model/artefact';
+import { IFeatureType } from 'src/interface/IFeatureType';
+import { IStudyArea } from 'src/interface/IStudyArea';
 
 /**
  * Json getter
@@ -124,6 +126,36 @@ async function getArtefactList(): Promise<Artefact[]> {
   return [];
 }
 
+/**
+ * Get feature type list
+ */
+async function getFeatureTypeList(): Promise<string[]> {
+  const result = await getJSON<IFeatureType[]>(
+    `${APP_SETTINGS.featureServer}/functions/public.get_feature_type_list/items.json`
+  );
+
+  if (result) {
+    return result.map((type) => type.featureType);
+  }
+
+  return [];
+}
+
+/**
+ * Get study area list
+ */
+async function getStudyAreaList(): Promise<string[]> {
+  const result = await getJSON<IStudyArea[]>(
+    `${APP_SETTINGS.featureServer}/functions/public.get_study_area_list/items.json`
+  );
+
+  if (result) {
+    return result.map((area) => area.studyArea);
+  }
+
+  return [];
+}
+
 const ApiRequestor = {
   getSiteById,
   getSiteList,
@@ -131,6 +163,8 @@ const ApiRequestor = {
   getBuildMaterialList,
   getDocumentList,
   getArtefactList,
+  getFeatureTypeList,
+  getStudyAreaList,
 };
 
 export default ApiRequestor;
