@@ -29,7 +29,7 @@
 
     <!-- Content -->
     <q-card-section id="site-manager" class="bg-secondary">
-      <q-form>
+      <q-form @submit="openDialog" @reset="cancel">
         <fieldset style="margin-top: 0px">
           <legend>Names</legend>
 
@@ -59,6 +59,7 @@
             v-model="site.alternativeKhmerName"
             :label="SITE_TYPE_REFS_PARAMS.alternativeKhmerName"
             :edition-mode="editionMode"
+            no-padding
           />
         </fieldset>
 
@@ -75,7 +76,7 @@
           <FormSelect
             v-model="site.featureType"
             :label="SITE_TYPE_REFS_PARAMS.featureType"
-            :options="['Temple', 'Mound']"
+            :options="featureTypeList"
             :edition-mode="editionMode"
           />
 
@@ -83,7 +84,7 @@
           <FormSelect
             v-model="site.studyArea"
             :label="SITE_TYPE_REFS_PARAMS.studyArea"
-            :options="['Angkor', 'Phnom Penh']"
+            :options="studyArea"
             :edition-mode="editionMode"
           />
 
@@ -120,6 +121,7 @@
             option-value="researcherId"
             option-label="fullName"
             :edition-mode="editionMode"
+            no-padding
           />
         </fieldset>
 
@@ -139,6 +141,7 @@
             :label="SITE_TYPE_REFS_PARAMS.verificationDate"
             :edition-mode="editionMode"
             date
+            no-padding
           />
         </fieldset>
 
@@ -158,6 +161,7 @@
             :label="SITE_TYPE_REFS_PARAMS.ceramicsDetails"
             :edition-mode="editionMode"
             autogrow
+            no-padding
           />
         </fieldset>
 
@@ -179,8 +183,9 @@
           <FormInput
             v-model="site.artefactsComments"
             :label="SITE_TYPE_REFS_PARAMS.artefactComments"
-            :edition-mode="!editionMode"
+            :edition-mode="editionMode"
             autogrow
+            no-padding
           />
         </fieldset>
 
@@ -204,6 +209,7 @@
             :label="SITE_TYPE_REFS_PARAMS.buildMaterialComments"
             :edition-mode="editionMode"
             autogrow
+            no-padding
           />
         </fieldset>
 
@@ -284,44 +290,43 @@
             v-model="site.userModification"
             :label="SITE_TYPE_REFS_PARAMS.userModification"
             :edition-mode="editionMode"
+            no-padding
           />
         </fieldset>
+        <div class="q-pa-md q-gutter-sm row justify-end">
+          <q-btn
+            v-if="!editionMode"
+            class="site-button"
+            square
+            color="primary"
+            label="Edit"
+            @click="editionMode = !editionMode"
+          />
+          <q-btn
+            v-if="editionMode"
+            type="reset"
+            class="site-button"
+            outline
+            square
+            color="primary"
+            label="Cancel"
+          />
+          <q-btn
+            v-if="editionMode"
+            type="submit"
+            class="site-button"
+            square
+            color="primary"
+            label="Save"
+          />
+        </div>
       </q-form>
-
-      <!-- Action buttons -->
-      <div class="q-pa-md q-gutter-sm row justify-end">
-        <q-btn
-          v-if="!editionMode"
-          class="site-button"
-          square
-          color="primary"
-          label="Edit"
-          @click="editionMode = !editionMode"
-        />
-        <q-btn
-          v-if="editionMode"
-          class="site-button"
-          outline
-          square
-          color="primary"
-          label="Cancel"
-          @click="editionMode = !editionMode"
-        />
-        <q-btn
-          v-if="editionMode"
-          class="site-button"
-          square
-          color="primary"
-          label="Save"
-          @click="confirmDialogManager(true, true)"
-        />
-      </div>
 
       <!-- Dialog -->
       <ConfirmDialog
         :visible="confirmDialogVisibility"
-        @update:confirm="confirmDialogManager(false, false)"
-        @update:cancel="confirmDialogManager(false, true)"
+        @update:confirm="saveData()"
+        @update:cancel="menageDialog(false, true)"
       ></ConfirmDialog>
     </q-card-section>
   </q-card>
@@ -330,14 +335,19 @@
 <script setup lang="ts">
 import { useSiteStore } from '../../stores/site-store';
 import { SITE_TYPE_REFS_PARAMS } from '../../utils/params/typeRefsSettings';
-import { ref } from 'vue';
+import { ref, toRaw } from 'vue';
+import { Site } from '../../model/site';
 import ConfirmDialog from './ConfirmDialog.vue';
 import ApiRequestor from '../../services/ApiRequestor';
 import FormSelect from './FormSelect.vue';
 import FormInput from './FormInput.vue';
 
 const siteStore = useSiteStore();
-const site = ref(siteStore.site!);
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const site = ref(siteStore.site! as Site);
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+let originalSite = structuredClone(toRaw(siteStore.site!) as Site);
+
 const editionMode = ref(false);
 const confirmDialogVisibility = ref(false);
 const expended = ref(false);
@@ -346,15 +356,43 @@ const researchers = await ApiRequestor.getResearcherList();
 const buildMaterials = await ApiRequestor.getBuildMaterialList();
 const documents = await ApiRequestor.getDocumentList();
 const artefacts = await ApiRequestor.getArtefactList();
+const featureTypeList = await ApiRequestor.getFeatureTypeList();
+const studyArea = await ApiRequestor.getStudyAreaList();
+
+function saveData(): void {
+  menageDialog(false, false);
+  siteStore.updateSite(cloneSite(site.value as Site, true));
+  originalSite = cloneSite(site.value as Site, true);
+  editionMode.value = false;
+}
+
+function openDialog(): void {
+  menageDialog(true, true);
+}
+
+function cancel(): void {
+  siteStore.updateSite(cloneSite(originalSite));
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  site.value = siteStore.site! as Site;
+  editionMode.value = false;
+}
 
 /**
  * Manage dialog event
  * @param visibility Set the dialog visibility
  * @param edition Set form edition mode
  */
-function confirmDialogManager(visibility: boolean, edition: boolean): void {
+function menageDialog(visibility: boolean, edition: boolean): void {
   editionMode.value = edition;
   confirmDialogVisibility.value = visibility;
+}
+
+function cloneSite(site: Site, isRef?: boolean): Site {
+  if (isRef) {
+    return structuredClone(toRaw(site) as Site);
+  } else {
+    return structuredClone(site);
+  }
 }
 </script>
 
@@ -371,10 +409,6 @@ legend {
   color: $primary;
 }
 
-.form-element {
-  margin-bottom: 10px;
-}
-
 .header {
   position: sticky;
   top: 0px;
@@ -384,17 +418,5 @@ legend {
 
 .site-button {
   width: 90px;
-}
-
-.q-field {
-  &.q-field--readonly {
-    &.q-field--outlined {
-      .q-field__control {
-        &:before {
-          border: transparent;
-        }
-      }
-    }
-  }
 }
 </style>
