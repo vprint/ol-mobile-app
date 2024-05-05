@@ -27,7 +27,13 @@
     ></q-separator>
 
     <!-- Coordinates -->
-    <q-btn v-if="$q.platform.is.desktop" fab flat icon="mdi-map-marker-check">
+    <q-btn
+      v-if="$q.platform.is.desktop"
+      fab
+      flat
+      icon="sym_s_location_on"
+      class="icon-weight-thin"
+    >
       <q-tooltip
         anchor="bottom middle"
         self="bottom middle"

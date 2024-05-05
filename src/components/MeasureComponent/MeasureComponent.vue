@@ -4,7 +4,8 @@
     :fab="$q.platform.is.desktop"
     :round="$q.platform.is.mobile"
     :color="$q.platform.is.mobile ? 'secondary' : undefined"
-    icon="sym_o_straighten"
+    icon="sym_s_straighten"
+    class="icon-weight-thin"
     :text-color="$q.platform.is.mobile ? 'primary' : undefined"
     @click="addMeasure()"
   >

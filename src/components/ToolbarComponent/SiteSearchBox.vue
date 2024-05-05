@@ -22,7 +22,10 @@
     @clear="siteStore.clearSite"
   >
     <template #append>
-      <q-icon name="search" class="cursor-pointer"></q-icon>
+      <q-icon
+        name="sym_s_search"
+        class="cursor-pointer icon-weight-thin"
+      ></q-icon>
     </template>
   </q-select>
 </template>

@@ -4,7 +4,8 @@
     v-if="$q.platform.is.desktop"
     fab
     flat
-    icon="mdi-layers"
+    icon="sym_s_stacks"
+    class="icon-weight-thin"
     @click="componentStore.setWidget(true, 'layer-manager')"
   >
     <q-tooltip
@@ -24,7 +25,8 @@
     v-if="$q.platform.is.mobile"
     round
     color="secondary"
-    icon="mdi-layers"
+    icon="sym_s_stacks"
+    class="icon-weight-thin"
     text-color="primary"
     @click="componentStore.setWidget(true, 'layer-manager')"
   >
