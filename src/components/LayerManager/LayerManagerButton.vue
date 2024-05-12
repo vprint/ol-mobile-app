@@ -6,7 +6,7 @@
     flat
     icon="sym_s_stacks"
     class="icon-weight-thin"
-    @click="componentStore.setWidget(true, 'layer-manager')"
+    @click="setWidget(true, 'layer-manager')"
   >
     <q-tooltip
       anchor="bottom middle"
@@ -28,7 +28,7 @@
     icon="sym_s_stacks"
     class="icon-weight-thin"
     text-color="primary"
-    @click="componentStore.setWidget(true, 'layer-manager')"
+    @click="setWidget(true, 'layer-manager')"
   >
   </q-btn>
 </template>
@@ -36,7 +36,8 @@
 <script setup lang="ts">
 import { useComponentStore } from 'src/stores/component-store';
 
-const componentStore = useComponentStore();
+const { setWidget } = useComponentStore();
+console.log(setWidget);
 </script>
 
 <style lang="scss"></style>
