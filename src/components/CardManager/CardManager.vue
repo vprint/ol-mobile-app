@@ -18,8 +18,8 @@
     ><Suspense>
       <SiteManager
         v-if="widget.visibility && widget.widgetName === 'site-manager'"
-      ></SiteManager
-    ></Suspense>
+      ></SiteManager>
+    </Suspense>
   </transition>
 </template>
 
@@ -29,8 +29,9 @@ import { useComponentStore } from 'src/stores/component-store';
 import { ref, watch } from 'vue';
 import LayerManager from '../LayerManager/LayerManager.vue';
 import SiteManager from '../SiteManager/SiteManager.vue';
+import { storeToRefs } from 'pinia';
 
-const componentStore = useComponentStore();
+const { widget } = storeToRefs(useComponentStore());
 const $q = useQuasar();
 const widget = ref(componentStore.widget);
 

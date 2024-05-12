@@ -19,7 +19,7 @@
     clearable
     @filter="filterFn"
     @update:model-value="selectSite"
-    @clear="siteStore.clearSite"
+    @clear="clearSite"
   >
     <template #append>
       <q-icon
@@ -31,10 +31,11 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref, Ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, Ref } from 'vue';
 import ApiRequestor from '../../services/ApiRequestor';
 import { useSiteStore } from 'src/stores/site-store';
 import { QSelect } from 'quasar';
+import { storeToRefs } from 'pinia';
 
 interface ISearchItems {
   label: string;
@@ -42,24 +43,16 @@ interface ISearchItems {
 }
 
 let searchList: ISearchItems[] = [];
-const siteStore = useSiteStore();
+
+const { site } = storeToRefs(useSiteStore());
+const { clearSite, fetchAndSetSite } = useSiteStore();
+
 const options: Ref<ISearchItems[]> = ref([]);
-const model: Ref<string | null> = ref(null);
+const model: Ref<string | null> = computed(() =>
+  site.value ? site.value.englishName : null
+);
 const isReady = ref(false);
 const siteSearch: Ref<null | QSelect> = ref(null);
-
-/**
- * Listen for site change
- */
-watch(
-  () => siteStore.site,
-  (newSite) => {
-    model.value = newSite?.englishName ?? null;
-  },
-  {
-    deep: true,
-  }
-);
 
 onMounted(async () => {
   const result = await ApiRequestor.getSiteList();
@@ -103,7 +96,7 @@ function selectSite(site: ISearchItems | undefined): void {
       }
     });
 
-    siteStore.fetchAndSetSite(site.value);
+    fetchAndSetSite(site.value);
   }
 }
 </script>

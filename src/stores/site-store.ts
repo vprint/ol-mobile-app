@@ -2,68 +2,60 @@ import { defineStore } from 'pinia';
 import { Site } from 'src/model/site';
 import { useComponentStore } from './component-store';
 import ApiRequestor from 'src/services/ApiRequestor';
-import { nextTick } from 'vue';
+import { nextTick, Ref, ref } from 'vue';
 
-const componentStore = useComponentStore();
+const { setWidget, widget } = useComponentStore();
 
-interface ISiteState {
-  _site: Site | undefined;
-}
+type ISiteState = Site | undefined;
 
-export const useSiteStore = defineStore('sites', {
-  state: (): ISiteState => ({
-    _site: undefined,
-  }),
+export const useSiteStore = defineStore('sites', () => {
+  const site: Ref<ISiteState> = ref(undefined);
 
-  getters: {
-    site: (state) => state._site,
-  },
-
-  actions: {
-    /**
-     * Set active site and open site manager
-     * @param site Site
-     */
-    setSite(site: Site): void {
-      if (this._site?.siteId !== site.siteId) {
-        this._site = site;
-        if (componentStore.widget.visibility) {
-          componentStore.setWidget(false, '');
-          nextTick(() => {
-            componentStore.setWidget(true, 'site-manager');
-          });
-        } else {
-          componentStore.setWidget(true, 'site-manager');
-        }
+  /**
+   * Set active site and open site manager
+   * @param site Site
+   */
+  function setSite(newSite: Site): void {
+    if (newSite.siteId !== site.value?.siteId) {
+      site.value = newSite;
+      if (widget.visibility) {
+        setWidget(false, '');
+        nextTick(() => {
+          setWidget(true, 'site-manager');
+        });
+      } else {
+        setWidget(true, 'site-manager');
       }
-    },
+    }
+  }
 
-    /**
-     * Update site values
-     * @param site New site
-     */
-    updateSite(site: Site): void {
-      this._site = site;
-    },
+  /**
+   * Update site values
+   * @param site New site
+   */
+  function updateSite(newSite: Site): void {
+    site.value = newSite;
+  }
 
-    /**
-     * Fetch site and assign it in the store
-     * @param siteId site id
-     */
-    async fetchAndSetSite(siteId: number): Promise<void> {
-      const site = await ApiRequestor.getSiteById(siteId);
+  /**
+   * Fetch site and assign it in the store
+   * @param siteId site id
+   */
+  async function fetchAndSetSite(siteId: number): Promise<void> {
+    const fetchedSite = await ApiRequestor.getSiteById(siteId);
 
-      if (site) {
-        this.setSite(site);
-      }
-    },
+    if (fetchedSite) {
+      setSite(fetchedSite);
+    }
+  }
 
-    /**
-     * Clear site in store and close widget
-     */
-    clearSite(): void {
-      this._site = undefined;
-      componentStore.setWidget(false, '');
-    },
-  },
+  /**
+   * Clear site in store and close widget
+   */
+  function clearSite(): void {
+    site.value = undefined;
+    setWidget(false, '');
+  }
+
+  return { site, setSite, updateSite, fetchAndSetSite, clearSite };
 });

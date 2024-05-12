@@ -23,7 +23,7 @@
         flat
         round
         icon="close"
-        @click="componentStore.setWidget(false, '')"
+        @click="setWidget(false, '')"
       />
     </q-bar>
 
@@ -38,7 +38,7 @@ import { useMapStore } from 'src/stores/map-store';
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
 import { ref, onMounted } from 'vue';
 
-const componentStore = useComponentStore();
+const { setWidget } = useComponentStore();
 const mapStore = useMapStore();
 const expended = ref(false);
 

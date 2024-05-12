@@ -5,7 +5,7 @@ import VectorTileLayer from 'ol/layer/VectorTile';
 import { useSiteStore } from 'src/stores/site-store';
 import { Pixel } from 'ol/pixel';
 
-const siteStore = useSiteStore();
+const { fetchAndSetSite } = useSiteStore();
 
 /**
  * Create a selector over the site site layer
@@ -42,7 +42,7 @@ export class MapSelector {
       const featureId = await this.getSiteFeatureId(pixel);
 
       if (featureId) {
-        siteStore.fetchAndSetSite(featureId);
+        fetchAndSetSite(featureId);
       }
     };
   }
@@ -55,7 +55,7 @@ export class MapSelector {
       const featureId = await this.getSiteFeatureId(e.pixel);
 
       if (featureId) {
-        siteStore.fetchAndSetSite(featureId);
+        fetchAndSetSite(featureId);
       }
     });
   }
