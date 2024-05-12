@@ -13,6 +13,7 @@ const siteStore = useSiteStore();
 export class MapSelector {
   private map: Map;
   private siteLayer: VectorTileLayer;
+  private _active = false;
 
   constructor(map: Map, platform: Platform) {
     this.map = map;
@@ -34,30 +35,34 @@ export class MapSelector {
    * Initiate mobile selector
    */
   private async mobileSelection(): Promise<void> {
-    this.map.getTargetElement().oncontextmenu = async (
-      e: MouseEvent
-    ): Promise<void> => {
-      e.preventDefault();
-      const pixel = this.map.getEventPixel(e);
-      const featureId = await this.getSiteFeatureId(pixel);
+    if (this._active) {
+      this.map.getTargetElement().oncontextmenu = async (
+        e: MouseEvent
+      ): Promise<void> => {
+        e.preventDefault();
+        const pixel = this.map.getEventPixel(e);
+        const featureId = await this.getSiteFeatureId(pixel);
 
-      if (featureId) {
-        siteStore.fetchAndSetSite(featureId);
-      }
-    };
+        if (featureId) {
+          siteStore.fetchAndSetSite(featureId);
+        }
+      };
+    }
   }
 
   /**
    * Initiate desktop selector
    */
   private async desktopSelection(): Promise<void> {
-    this.map.on('click', async (e) => {
-      const featureId = await this.getSiteFeatureId(e.pixel);
+    if (this._active) {
+      this.map.on('click', async (e) => {
+        const featureId = await this.getSiteFeatureId(e.pixel);
 
-      if (featureId) {
-        siteStore.fetchAndSetSite(featureId);
-      }
-    });
+        if (featureId) {
+          siteStore.fetchAndSetSite(featureId);
+        }
+      });
+    }
   }
 
   /**
@@ -82,5 +87,13 @@ export class MapSelector {
         return feature.get('site_id');
       });
     return feature;
+  }
+
+  /**
+   * Enable / disable selector
+   * @param mode
+   */
+  public setActive(mode: boolean): void {
+    this._active = mode;
   }
 }
